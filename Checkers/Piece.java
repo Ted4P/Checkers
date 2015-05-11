@@ -7,5 +7,22 @@
  */
 public class Piece
 {
-    
+    private boolean isWhite, isKing;
+    public Piece(boolean isWhite){
+        this.isWhite = isWhite;
+        isKing = false;
+    }
+
+    public String toString(){
+        if(isKing){
+            if(isWhite) 
+                return "WW";
+            return "BB";
+        }
+        else{
+            if(isWhite)
+                return "W";
+            return "B";
+        }
+    }
 }

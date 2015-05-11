@@ -1,2 +1,9 @@
 #BlueJ class context
-numComments=0
+comment0.params=
+comment0.target=Board()
+comment1.params=
+comment1.target=void\ addPieces()
+comment2.params=
+comment2.target=void\ printArr()
+comment2.text=\r\n\ Degugging\ method\:\ Print\ board\ to\ console\r\n
+numComments=3
