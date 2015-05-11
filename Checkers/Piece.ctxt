@@ -2,5 +2,9 @@
 comment0.params=isWhite
 comment0.target=Piece(boolean)
 comment1.params=
-comment1.target=java.lang.String\ toString()
-numComments=2
+comment1.target=boolean\ getIsKing()
+comment2.params=
+comment2.target=boolean\ getIsWhite()
+comment3.params=
+comment3.target=java.lang.String\ toString()
+numComments=4

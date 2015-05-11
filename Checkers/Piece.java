@@ -14,11 +14,11 @@ public class Piece
     }
     
     public boolean getIsKing(){
-        return isKing();
+        return isKing;
     }
     
     public boolean getIsWhite(){
-        return isWhite();
+        return isWhite;
     }
 
     public String toString(){

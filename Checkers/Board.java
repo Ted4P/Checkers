@@ -8,6 +8,8 @@
 public class Board
 {
     private Piece[][] board;
+    private int turn;                                                   //White has even numbered terms, black odd
+    
     public Board(){
         board = new Piece[8][8];
         addPieces();
@@ -23,6 +25,22 @@ public class Board
                 board[i][j] = new Piece(false);                          //Initialise black pieces
     }
 
+    public Piece gameIsWon(){                                            //If white has won, return a white piece, if black has won, return black, else return null
+        boolean blackAlive = false, whiteAlive = false;
+        for(Piece[] row: board){
+            for(Piece space: row){
+                if(space!=null){
+                    if(space.getIsWhite()) whiteAlive = true;
+                    else blackAlive = true;
+                }
+            }
+        }
+        
+        if(blackAlive && whiteAlive) return  null;
+        if(blackAlive) return new Piece(false);
+        return new Piece(true);
+    }
+    
     /**
      * Degugging method: Print board to console
      */
