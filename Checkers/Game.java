@@ -1,11 +1,11 @@
 
 /**
- * Write a description of class Board here.
+ * Write a description of class Game here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Board
+public class Game
 {
     
 }
