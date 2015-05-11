@@ -12,6 +12,14 @@ public class Piece
         this.isWhite = isWhite;
         isKing = false;
     }
+    
+    public boolean getIsKing(){
+        return isKing();
+    }
+    
+    public boolean getIsWhite(){
+        return isWhite();
+    }
 
     public String toString(){
         if(isKing){
