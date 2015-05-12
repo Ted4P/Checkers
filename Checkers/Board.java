@@ -57,7 +57,7 @@ public class Board
     private boolean kingValidMove(int xpos, int ypos, int newXPos, int newYPos){
         System.out.println("IN KINGVALIDMOVE");
         if(Math.abs(xpos - newXPos)==1&& Math.abs(ypos - newYPos)==1) return true;              //No direction checking is required
-        if(Math.abs(xpos - newXPos)==1&& Math.abs(ypos - newYPos)==1) return isValidCapture(xpos - (xpos - newXPos), ypos - (ypos - newYPos));
+        if(Math.abs(xpos - newXPos)==2&& Math.abs(ypos - newYPos)==2) return isValidCapture(xpos - (xpos - newXPos), ypos - (ypos - newYPos));
         return false;
     }
     
