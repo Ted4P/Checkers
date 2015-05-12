@@ -51,7 +51,7 @@ public class Board
     }
     
     private boolean blackValidMove(int xpos, int ypos, int newXPos, int newYPos){
-        return false;                                                                               //Placeholder, obviously
+        return true;                                                                               //Placeholder, obviously
     }
     
     private boolean kingValidMove(int xpos, int ypos, int newXPos, int newYPos){
