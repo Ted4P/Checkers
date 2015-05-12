@@ -1,8 +1,14 @@
 #BlueJ package file
+dependency1.from=Board
+dependency1.to=Piece
+dependency1.type=UsesDependency
 objectbench.height=76
-objectbench.width=662
+objectbench.width=719
 package.editor.height=400
-package.editor.width=560
+package.editor.width=621
+package.editor.x=776
+package.editor.y=369
+package.numDependencies=1
 package.numTargets=3
 package.showExtends=true
 package.showUses=true
