@@ -46,12 +46,13 @@ public class Board
     private boolean whiteValidMove(int xpos, int ypos, int newXPos, int newYPos){
         System.out.println("IN WHITEVALIDMOVE");
         if(xpos - newXPos == -1 && Math.abs(ypos - newYPos)==1) return true;                    //If it is "down" the board one in either direction
-        if(xpos - newXPos == -2 && Math.abs(ypos - newYPos)==1) return isValidCapture(xpos++, ypos - (ypos - newYPos));
+        if(xpos - newXPos == -2 && Math.abs(ypos - newYPos)==2) return isValidCapture(xpos++, ypos - (ypos - newYPos));
         return false;
     }
     
     private boolean blackValidMove(int xpos, int ypos, int newXPos, int newYPos){
-        return true;                                                                               //Placeholder, obviously
+        if(xpos - newXPos == 1 && Math.abs(ypos - newYPos)==1) return true;
+		if(xpos - newXPos == 2 && Math.abs(ypos - newYPos)==2) return isValidCapture(xpos--, ypos - (ypos - newYPos))
     }
     
     private boolean kingValidMove(int xpos, int ypos, int newXPos, int newYPos){
