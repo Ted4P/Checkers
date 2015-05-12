@@ -38,6 +38,8 @@ public class Board
         return board[xpos][ypos]==null;
     }
     
+    public boolean isWhiteTurn(){ return whiteTurn;}
+    
     
     /**
      * private methods to check for move validity for different colors
@@ -45,27 +47,38 @@ public class Board
     
     private boolean whiteValidMove(int xpos, int ypos, int newXPos, int newYPos){
         System.out.println("IN WHITEVALIDMOVE");
-        if(xpos - newXPos == -1 && Math.abs(ypos - newYPos)==1) return true;                    //If it is "down" the board one in either direction
-        if(xpos - newXPos == -2 && Math.abs(ypos - newYPos)==2) return isValidCapture(xpos++, ypos - (ypos - newYPos));
+        if(xpos - newXPos == -1 && Math.abs(ypos - newYPos)==1)  return true;                    //If it is "down" the board one in either direction
+        if(xpos - newXPos == -2 && Math.abs(ypos - newYPos)==2 && isValidCapture(xpos++, ypos - (ypos - newYPos))){makeCapture(xpos++, ypos - (ypos - newYPos)); return true;}
         return false;
     }
     
     private boolean blackValidMove(int xpos, int ypos, int newXPos, int newYPos){
         if(xpos - newXPos == 1 && Math.abs(ypos - newYPos)==1) return true;
-		if(xpos - newXPos == 2 && Math.abs(ypos - newYPos)==2) return isValidCapture(xpos--, ypos - (ypos - newYPos))
+		if(xpos - newXPos == 2 && Math.abs(ypos - newYPos)==2 && isValidCapture(xpos--, ypos - (ypos - newYPos))){ makeCapture(xpos--, ypos - (ypos - newYPos)); return true;}
+		return false;
     }
     
     private boolean kingValidMove(int xpos, int ypos, int newXPos, int newYPos){
         System.out.println("IN KINGVALIDMOVE");
         if(Math.abs(xpos - newXPos)==1&& Math.abs(ypos - newYPos)==1) return true;              //No direction checking is required
-        if(Math.abs(xpos - newXPos)==2&& Math.abs(ypos - newYPos)==2) return isValidCapture(xpos - (xpos - newXPos), ypos - (ypos - newYPos));
+        if(Math.abs(xpos - newXPos)==2&& Math.abs(ypos - newYPos)==2 && isValidCapture(xpos - (xpos - newXPos), ypos - (ypos - newYPos))) 
+			{ makeCapture(xpos - (xpos - newXPos), ypos - (ypos - newYPos)); return true;}
         return false;
     }
     
     private boolean isValidCapture(int xpos, int ypos){
-        if(isEmpty(xpos,ypos)) return false;
-        return board[xpos][ypos].getIsWhite()!=whiteTurn;
+        if(isEmpty(xpos,ypos)) return false;        
+		return board[xpos][ypos].getIsWhite()!=whiteTurn;
     }
+	
+	private void makeCapture(int xpos, int ypos){
+		board[xpos][ypos]=null;
+	}
+	
+	private void doMove ( int xpos, int ypos, int newXPos, int newYPos){
+		board[newXPos][newYPos] = board[xpos][ypos];
+		board[xpos][ypos]=null;
+	}
     
     /**
      * BCEAUAE OF THE GUI DESIGN, ALL INPUT IS ASSUMED TO BE SANITIZED!
@@ -73,9 +86,23 @@ public class Board
     public boolean makeMove(int xpos, int ypos, int newXPos, int newYPos){
         if(!isValidSelection(xpos, ypos)) return false;
         if(isEmpty(xpos, ypos)) return false;
-        if(board[xpos][ypos].getIsKing()) return kingValidMove(xpos, ypos, newXPos, newYPos);
-        if(board[xpos][ypos].getIsWhite()) return whiteValidMove(xpos, ypos, newXPos, newYPos);
-        return blackValidMove(xpos, ypos, newXPos, newYPos);
+		boolean valid = false;
+        if(board[xpos][ypos].getIsKing() && kingValidMove(xpos, ypos, newXPos, newYPos)){
+				valid = true;
+		}
+        else if(board[xpos][ypos].getIsWhite() && whiteValidMove(xpos, ypos, newXPos, newYPos)){
+			valid = true;
+		}
+        else if (blackValidMove(xpos, ypos, newXPos, newYPos)){
+			valid = true;
+		}
+		else return false;
+		if(valid){ doMove(xpos, ypos, newXPos, newYPos);
+			kingPromoter(newXPos, newYPos);
+			if(!doubleMove(newXPos, newYPos)) nextPlayer(); 
+			
+		}
+		return true;
     }
 
     public Piece gameIsWon(){                                            //If white has won, return a white piece, if black has won, return black, else return null
