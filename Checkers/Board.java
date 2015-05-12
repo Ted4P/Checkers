@@ -104,6 +104,20 @@ public class Board
 		}
 		return true;
     }
+	
+	private boolean doubleMove(int xpos, int ypos){ 							//if another capture is possible
+		int[] newXP = {xpos + 2, xpos - 2};
+		int[] newYP = {ypos + 2, ypos - 2};
+		for(int x: newXP)
+			for(int y: newYP)
+				if(x > -1 && y > -1 && x < board.length && y < board.length && isEmpty(x,y) && isValidCapture(xpos - (xpos - newXPos), ypos - (ypos - newYPos))) return true;
+		return false;
+	}
+	
+	private void kingPromoter(int xpos, int ypos){
+		if(board[xpos][ypos].getIsWhite() && xpos == board.length -1) board[xpos][ypos].makeKing();
+		else if(!board[xpos][ypos].getIsWhite() && xpos == 0) board[xpos][ypos].makeKing();
+	}
 
     public Piece gameIsWon(){                                            //If white has won, return a white piece, if black has won, return black, else return null
         boolean blackAlive = false, whiteAlive = false;

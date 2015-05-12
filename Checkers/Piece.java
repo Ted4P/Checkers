@@ -16,6 +16,10 @@ public class Piece
     public boolean getIsKing(){
         return isKing;
     }
+	
+	public boolean makeKing(){
+		isKing = true;
+	}
     
     public boolean getIsWhite(){
         return isWhite;
