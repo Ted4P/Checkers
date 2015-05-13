@@ -17,7 +17,7 @@ public class Piece
         return isKing;
     }
 	
-	public boolean makeKing(){
+	public void makeKing(){
 		isKing = true;
 	}
     
