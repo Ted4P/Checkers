@@ -117,7 +117,7 @@ public class Board
         else return false;
         if(valid){ doMove(xpos, ypos, newXPos, newYPos);
             kingPromoter(newXPos, newYPos);
-            if(!doubleMove(newXPos, newYPos)) nextPlayer(); 
+            if(!(captureMade && doubleMove(newXPos, newYPos))) nextPlayer(); 
 
         }
         return true;
