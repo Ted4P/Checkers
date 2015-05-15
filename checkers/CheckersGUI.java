@@ -19,7 +19,7 @@ public class CheckersGUI extends javax.swing.JFrame {
     private JLabel boardBackground;
 
     private final int BASELINE = 42;
-    private final int MULTIPLIER = 62; 
+    private final int MULTIPLIER = 62;
     /**
      * Creates new form CheckersGUI
      */
@@ -80,6 +80,10 @@ public class CheckersGUI extends javax.swing.JFrame {
                  */
 
         //board
+        
+        renderBoard();
+        
+        
         boardBackground = new JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -189,7 +193,7 @@ public class CheckersGUI extends javax.swing.JFrame {
         getContentPane().add(boardBackground);
         boardBackground.setBounds(32, 30, 502, 500);
 
-        renderBoard();
+        
         
         
         pack();
@@ -219,13 +223,15 @@ public class CheckersGUI extends javax.swing.JFrame {
                     {
                         GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/white.png")));
                         getContentPane().add(GUIboard[i][j]);
-                        GUIboard[i][j].setBounds(BASELINE+MULTIPLIER*i, BASELINE+MULTIPLIER*j, 96, 42);
+                            System.out.println("printed ["+i+"]["+j+"]");
+                        GUIboard[i][j].setBounds(BASELINE+MULTIPLIER*j, BASELINE+MULTIPLIER*i, 96, 42);
                     }
                     else 
                     {
                         GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/red.png")));
                         getContentPane().add(GUIboard[i][j]);
-                        GUIboard[i][j].setBounds(BASELINE+MULTIPLIER*i, BASELINE+MULTIPLIER*j, 96, 42);
+                            System.out.println("printed ["+i+"]["+j+"]");
+                        GUIboard[i][j].setBounds(BASELINE+MULTIPLIER*j, BASELINE+MULTIPLIER*i, 96, 42);
                     }
                     
                     GUIboard[i][j].setVisible(true);
