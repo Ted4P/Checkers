@@ -41,6 +41,14 @@ public class Board
 
     public boolean isWhiteTurn(){ return whiteTurn;}
 
+    public Piece getPiece (int xpos, int ypos)
+    {
+        
+        return board[xpos][ypos];
+        
+    }
+    
+    
     /**
      * private methods to check for move validity for different colors
      */
