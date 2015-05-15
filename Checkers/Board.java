@@ -64,7 +64,7 @@ public class Board
             kingPromoter(newXPos, newYPos);
             
             
-            if(turnProc.wasDoubleMove() && doubleMove(newXPos, newYPos)){
+            if(turnProc.wasMoveCapture() && doubleMove(newXPos, newYPos)){
                 lastMoveDouble = true;
                 lastX = newXPos;
                 lastY = newYPos;
