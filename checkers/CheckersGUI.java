@@ -6,26 +6,28 @@
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.GridLayout;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  *
  * @author hyunchoi98
  */
-public class CheckersGUI extends javax.swing.JFrame {
+public class CheckersGUI extends javax.swing.JFrame  {
     public Board board;
     private JLabel[][] GUIboard;
 
     private JPanel boardGUI;
+    
+    private boolean selected = false;
 
-    private Piece currentSelected;
-    //private JLabel[] white;
-    //private JLabel[] red;
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private JLabel[] currentSelected;
+
     private JLabel boardBackground;
 
     private final int BASELINE = 42;
     private final int MULTIPLIER = 62;
+
     /**
      * Creates new form CheckersGUI
      */
@@ -35,25 +37,28 @@ public class CheckersGUI extends javax.swing.JFrame {
         GUIboard = new JLabel[8][8];
         for (int i = 0; i < 8; i++)
         {
-            for (int j=0; j < 8; j++)
+            for (int j = 0; j < 8; j++)
             {
                 //if(board.getPiece(i,j) != null)
                 GUIboard[i][j] = new JLabel();
-
+                GUIboard[i][j].addMouseListener(new MouseAdapter() {
+                        public void mouseClicked(MouseEvent e) {
+                            pressed(e);
+                        }
+                    });
             }
         }
+
+        currentSelected = new JLabel[2];
 
         boardGUI = new JPanel();
         boardGUI.setLayout(new GridLayout(8,8));
 
-        //do this last
-        //renderBoard();
-
         
+        //do this last
+        renderBoard();
+
     }
-
-    
-
     public void renderBoard()
     {
 
@@ -71,7 +76,7 @@ public class CheckersGUI extends javax.swing.JFrame {
                             GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteking.png")));
                         else 
                             GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhite.png")));
-                        
+
                     }
                     else //so that means it's a red
                     {
@@ -80,8 +85,7 @@ public class CheckersGUI extends javax.swing.JFrame {
                         else 
                             GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithred.png")));
                     }
-                    
-                    
+
                     previousColorIsWhite=true;
                 }
                 else //if no piece, then blank tile
@@ -91,22 +95,9 @@ public class CheckersGUI extends javax.swing.JFrame {
                     else
                         GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitetile.png")));
 
-                    
-
                     previousColorIsWhite = !previousColorIsWhite;
-
-                    
                 }
-
-                /**
-                getContentPane().add(GUIboard[i][j]);
-                System.out.println("printed ["+i+"]["+j+"]");
-                GUIboard[i][j].setBounds(BASELINE+MULTIPLIER*j, BASELINE+MULTIPLIER*i, 96, 42);
-                GUIboard[i][j].setBorder(javax.swing.BorderFactory.createEmptyBorder());
-                 */
-
                 boardGUI.add(GUIboard[i][j]);
-
             }
             previousColorIsWhite=!previousColorIsWhite;
         }
@@ -116,16 +107,41 @@ public class CheckersGUI extends javax.swing.JFrame {
         panel.setLocation(42,42);
 
         getContentPane().add(panel);
-        getContentPane().setVisible(true);
+
+        //boardGUI.addMouseListener(this);
+
+
+        pack();
         this.setVisible(true);
 
-
-        
     }
 
+    public void pressed(MouseEvent e)
+    {
+
+        Component c = boardGUI.findComponentAt(e.getX(), e.getY());
+
+        if (!selected)
+        {
+
+            currentSelected[0]=(JLabel) c;
+            System.out.println("currentselected(0)");
+            selected = true;
+        }
+        else
+        {
+
+            currentSelected[1]=(JLabel) c;
+            System.out.println("currentselected(1)");
+
+        }
+        
+
+           
+    }
     /**
      * @param args the command line arguments
-     */
+    });    */
     public void main() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -156,21 +172,20 @@ public class CheckersGUI extends javax.swing.JFrame {
                     new CheckersGUI().setVisible(true);
                 }
             });
+
     }
 
     public static void tester (String[] args)
     {
         CheckersGUI gui = new CheckersGUI();
-        
 
         gui.board.makeMove(2,0,3,1);
         gui.board.printArr();
-        
-        gui.renderBoard();
-        
 
-        
+        gui.renderBoard();
 
     }
 
+    
+    
 }
