@@ -43,9 +43,7 @@ public class Board
 
     public Piece getPiece (int xpos, int ypos)
     {
-        
-        return board[xpos][ypos];
-        
+        return board[xpos][ypos];   
     }
     
     

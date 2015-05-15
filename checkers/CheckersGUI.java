@@ -11,13 +11,21 @@ import javax.swing.JLabel;
  * @author hyunchoi98
  */
 public class CheckersGUI extends javax.swing.JFrame {
+    private Board board;
+    private JLabel[][] GUIboard;
+    //private JLabel[] white;
+    //private JLabel[] red;
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private JLabel boardBackground;
 
+    private final int BASELINE = 42;
+    private final int MULTIPLIER = 62; 
     /**
      * Creates new form CheckersGUI
      */
     public CheckersGUI() {
-        initComponents();
         board = new Board();
+        initComponents();
         //red = new JLabel[12];
         //white = new JLabel[12];
     }
@@ -263,15 +271,7 @@ public class CheckersGUI extends javax.swing.JFrame {
             });
     }
 
-    private Board board;
-    private JLabel[][] GUIboard;
-    //private JLabel[] white;
-    //private JLabel[] red;
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JLabel boardBackground;
-
-    private final int BASELINE = 42;
-    private final int MULTIPLIER = 62; 
+   
 
     /** private JLabel jLabel10;
     private JLabel jLabel11;
