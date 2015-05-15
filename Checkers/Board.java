@@ -57,14 +57,14 @@ public class Board
             if(!turnProc.wasMoveCapture()) return false;
         }
         else if(!isValidSelection(xpos, ypos)) return false;
-        
+        if(board[newXPos][newYPos]==null) return false;
         if(turnProc.isValidTurn()){
             lastMoveDouble = false;
             doMove(xpos, ypos, newXPos, newYPos);
             kingPromoter(newXPos, newYPos);
             
             
-            if(doubleMove(newXPos, newYPos)){
+            if(turnProc.wasDoubleMove() && doubleMove(newXPos, newYPos)){
                 lastMoveDouble = true;
                 lastX = newXPos;
                 lastY = newYPos;
