@@ -21,7 +21,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
     
     private boolean selected = false;
 
-    private JLabel[] currentSelected;
+    private int[][] currentSelected;
 
     private JLabel boardBackground;
 
@@ -41,24 +41,69 @@ public class CheckersGUI extends javax.swing.JFrame  {
             {
                 //if(board.getPiece(i,j) != null)
                 GUIboard[i][j] = new JLabel();
-                GUIboard[i][j].addMouseListener(new MouseAdapter() {
-                        public void mouseClicked(MouseEvent e) {
-                            pressed(e);
-                        }
-                    });
+                
             }
         }
 
-        currentSelected = new JLabel[2];
+        
+        currentSelected = new int[2][2];
 
         boardGUI = new JPanel();
         boardGUI.setLayout(new GridLayout(8,8));
+        boardGUI.addMouseListener(new MouseAdapter() {
+            
+                        int selected =0;
+                        
+                        public void mouseClicked(MouseEvent e) {
+                            
+                            if (selected==0)
+                            {
+                                currentSelected[0]=arrayCoord(pressed(e));
+                                selected++;
+                            }
+                            else if (selected ==1)
+                            {
+                                currentSelected[1]=arrayCoord(pressed(e));
+                                move(currentSelected);
+                                    System.out.println("MOVE");
+                                    board.printArr();
+                                
+                                renderBoard();
+                                    System.out.println("RENDER BOARD");
+                                
+                                selected++;
+                                
+                            }
+                            else //initialize, might need to move it into elseif statement
+                            {
+                                currentSelected = new int[2][2];
+                                selected=0;
+                            }
+                            
+                            
+                            
+                                //debugging
+                                
+                            for (int[] curr: currentSelected)
+                            {
+                                for (int j: curr)
+                                    System.out.print(j+" ");
+                                System.out.println();
+                            }
+                            System.out.println();
+
+                        }
+                        
+                        
+                    });
 
         
         //do this last
         renderBoard();
 
     }
+    
+    
     public void renderBoard()
     {
 
@@ -116,65 +161,49 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     }
 
-    public void pressed(MouseEvent e)
+    private int[] pressed(MouseEvent e)
     {
 
         Component c = boardGUI.findComponentAt(e.getX(), e.getY());
+        
+        int[] coordinates = new int[2]; //[x,y]
+        
+                System.out.println(e.getX() + "," + e.getY());
+        
+        coordinates[0] = e.getX();
+        coordinates[1] = e.getY();
 
-        if (!selected)
-        {
-
-            currentSelected[0]=(JLabel) c;
-            System.out.println("currentselected(0)");
-            selected = true;
-        }
-        else
-        {
-
-            currentSelected[1]=(JLabel) c;
-            System.out.println("currentselected(1)");
-
-        }
+        
+        
+        
+        return coordinates;
+        
         
 
            
     }
-    /**
-     * @param args the command line arguments
-    });    */
-    public void main() {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CheckersGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CheckersGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CheckersGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CheckersGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new CheckersGUI().setVisible(true);
-                }
-            });
-
+    
+    
+    private int[] arrayCoord(int[] pixelCoord)
+    {
+        int[] newArr = new int[2];
+        
+        for (int i=0; i<2; i++)
+            newArr[i] = pixelCoord[i]/MULTIPLIER;
+                
+        return newArr;
     }
-
+        
+    private void move(int[][] currentSelected)
+    {
+        board.makeMove(currentSelected[0][1],currentSelected[0][0],currentSelected[1][1],currentSelected[1][0]);
+        
+        System.out.println(currentSelected[0][0]+","+currentSelected[0][1] + " to " + currentSelected[1][0] + "," + currentSelected[1][1]);
+    }
+    
+    
+    
+    
     public static void tester (String[] args)
     {
         CheckersGUI gui = new CheckersGUI();
