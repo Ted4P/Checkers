@@ -10,6 +10,8 @@ public class Board
     private Piece[][] board;
     private boolean whiteTurn;                                                   //White has even numbered turns, black odd
     private boolean captureMade;
+    private boolean lastMoveDouble;
+    private int lastX, lastY;
 
     public Board(){
         board = new Piece[8][8];
@@ -48,12 +50,26 @@ public class Board
      * private methods to check for move validity for different colors
      */
     public boolean makeMove(int xpos, int ypos, int newXPos, int newYPos){
-        if(!isValidSelection(xpos, ypos)) return false;
         TurnProcessor turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);
+        if(lastMoveDouble){
+            if(xpos!=lastX && ypos !=lastY) return false;
+            turnProc.isValidTurn();
+            if(!turnProc.wasMoveCapture()) return false;
+        }
+        else if(!isValidSelection(xpos, ypos)) return false;
+        
         if(turnProc.isValidTurn()){
+            lastMoveDouble = false;
             doMove(xpos, ypos, newXPos, newYPos);
             kingPromoter(newXPos, newYPos);
-            if(!(doubleMove(newXPos, newYPos))) nextPlayer();
+            
+            
+            if(doubleMove(newXPos, newYPos)){
+                lastMoveDouble = true;
+                lastX = newXPos;
+                lastY = newYPos;
+            }
+            else nextPlayer();
             return true;
         }
         return false;
