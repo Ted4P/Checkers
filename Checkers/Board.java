@@ -28,13 +28,11 @@ public class Board
     }
 
     private boolean isValidSelection(int xpos, int ypos){                 //If the selected piece is owned by the current player's turn
-        System.out.println("DEBUG: IN ISVALIDSELECTION");
         if(board[xpos][ypos]==null) return false;
-        System.out.println("BOARD SELECTION IS NOT NULL");
         return board[xpos][ypos].getIsWhite()==whiteTurn;                  //Return if the board piece is a white one == the current player turn;
     }
 
-    private boolean isEmpty(int xpos, int ypos){
+    public boolean isEmpty(int xpos, int ypos){
         System.out.println("IN ISEMPTY");
         return board[xpos][ypos]==null;
     }
@@ -45,88 +43,25 @@ public class Board
     {
         return board[xpos][ypos];   
     }
-    
-    
+
     /**
      * private methods to check for move validity for different colors
      */
-
-    private boolean whiteValidMove(int xpos, int ypos, int newXPos, int newYPos){
-        System.out.println("IN WHITEVALIDMOVE");
-        if(xpos - newXPos == -1 && Math.abs(ypos - newYPos)==1)  return true;                    //If it is "down" the board one in either direction
-        if(xpos - newXPos == -2 && Math.abs(ypos - newYPos)==2 && isValidCapture(xpos, ypos, newXPos, newYPos)){makeCapture(xpos, ypos, newXPos, newYPos); return true;}
-        return false;
-    }
-
-    private boolean blackValidMove(int xpos, int ypos, int newXPos, int newYPos){
-        if(xpos - newXPos == 1 && Math.abs(ypos - newYPos)==1) return true;
-        if(xpos - newXPos == 2 && Math.abs(ypos - newYPos)==2 && isValidCapture(xpos, ypos, newXPos, newYPos)){ makeCapture(xpos, ypos, newXPos, newYPos); return true;}
-        return false;
-    }
-
-    private boolean kingValidMove(int xpos, int ypos, int newXPos, int newYPos){
-        System.out.println("IN KINGVALIDMOVE");
-        if(Math.abs(xpos - newXPos)==1&& Math.abs(ypos - newYPos)==1) return true;              //No direction checking is required
-        if(Math.abs(xpos - newXPos)==2&& Math.abs(ypos - newYPos)==2 && isValidCapture(xpos, ypos, newXPos, newYPos)) 
-        { makeCapture(xpos, ypos, newXPos, newYPos); return true;}
-        return false;
-    }
-
-    private boolean isValidCapture(int xpos, int ypos, int newXPos, int newYPos){
-        int[] middle = deriveMiddle(xpos, ypos, newXPos, newYPos);
-        
-        System.out.println("IN ISVALIDCAPTURE:" + xpos + " " + ypos);
-        if(isEmpty(middle[0],middle[1])) return false;
-        System.out.println("NOTEMPTY");
-        return board[middle[0]][middle[1]].getIsWhite()!=whiteTurn;
-    }
-    
-    private int[] deriveMiddle(int xpos, int ypos, int newXPos, int newYPos){
-        int[] middle = new int[2];
-        if(xpos > newXPos)
-            middle[0] = xpos - 1;
-        else middle[0] = xpos + 1;
-        if(ypos > newYPos)
-            middle[1] = ypos - 1;
-        else middle[1] = ypos + 1;
-        return middle;
-    }
-
-    private void makeCapture(int xpos, int ypos, int newXPos, int newYPos){
-        int[] middle = deriveMiddle(xpos, ypos, newXPos, newYPos);
-        board[middle[0]][middle[1]]=null;
-        captureMade = true;
-    }
-
-    private void doMove ( int xpos, int ypos, int newXPos, int newYPos){
-        board[newXPos][newYPos] = board[xpos][ypos];
-        board[xpos][ypos]=null;
-    }
-
-    /**
-     * BCEAUAE OF THE GUI DESIGN, ALL INPUT IS ASSUMED TO BE SANITIZED!
-     */
     public boolean makeMove(int xpos, int ypos, int newXPos, int newYPos){
         if(!isValidSelection(xpos, ypos)) return false;
-        if(isEmpty(xpos, ypos)) return false;
-        captureMade = false;
-        boolean valid = false;
-        if(board[xpos][ypos].getIsKing() && kingValidMove(xpos, ypos, newXPos, newYPos)){
-            valid = true;
-        }
-        else if(board[xpos][ypos].getIsWhite() && whiteValidMove(xpos, ypos, newXPos, newYPos)){
-            valid = true;
-        }
-        else if (blackValidMove(xpos, ypos, newXPos, newYPos)){
-            valid = true;
-        }
-        else return false;
-        if(valid){ doMove(xpos, ypos, newXPos, newYPos);
+        TurnProcessor turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);
+        if(turnProc.isValidTurn()){
+            doMove(xpos, ypos, newXPos, newYPos);
             kingPromoter(newXPos, newYPos);
-            if(!(captureMade && doubleMove(newXPos, newYPos))) nextPlayer(); 
-
+            if(!(doubleMove(newXPos, newYPos))) nextPlayer();
+            return true;
         }
-        return true;
+        return false;
+    }
+    
+    private void doMove(int xpos, int ypos, int newXPos, int newYPos){
+        board[newXPos][newYPos] = board[xpos][ypos];
+        board[xpos][ypos] = null;
     }
 
     private boolean doubleMove(int xpos, int ypos){                             //if another capture is possible
@@ -134,7 +69,10 @@ public class Board
         int[] newYP = {ypos + 2, ypos - 2};
         for(int x: newXP)
             for(int y: newYP)
-                if(x > -1 && y > -1 && x < board.length && y < board.length && isEmpty(x,y) && isValidCapture(xpos, ypos, x, y)) return true;
+                if(x > -1 && y > -1 && x < board.length && y < board.length && isEmpty(x,y)){
+                    TurnProcessor turnProc = new TurnProcessor(xpos, ypos, x, y, this);
+                    if(turnProc.isValidTurn()) return true;
+                }
         return false;
     }
 
@@ -145,6 +83,11 @@ public class Board
 
     private void nextPlayer(){
         whiteTurn = !whiteTurn;
+    }
+
+    private void makeCapture(TurnProcessor turnProc){
+        int[] middle = turnProc.getCaptureTarget();
+        board[middle[0]][middle[1]]=null;
     }
 
     public Piece gameIsWon(){                                            //If white has won, return a white piece, if black has won, return black, else return null
