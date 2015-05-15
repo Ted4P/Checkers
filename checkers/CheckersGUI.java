@@ -26,6 +26,7 @@ public class CheckersGUI extends javax.swing.JFrame {
     public CheckersGUI() {
         board = new Board();
         initComponents();
+        GUIboard = new JLabel[8][8];
         //red = new JLabel[12];
         //white = new JLabel[12];
     }
