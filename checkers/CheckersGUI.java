@@ -25,8 +25,12 @@ public class CheckersGUI extends javax.swing.JFrame {
      */
     public CheckersGUI() {
         board = new Board();
-        initComponents();
         GUIboard = new JLabel[8][8];
+        
+        
+        //do this last
+        initComponents();
+        
         //red = new JLabel[12];
         //white = new JLabel[12];
     }
@@ -223,6 +227,8 @@ public class CheckersGUI extends javax.swing.JFrame {
                         getContentPane().add(GUIboard[i][j]);
                         GUIboard[i][j].setBounds(BASELINE+MULTIPLIER*i, BASELINE+MULTIPLIER*j, 96, 42);
                     }
+                    
+                    GUIboard[i][j].setVisible(true);
                 }
                 
                 
