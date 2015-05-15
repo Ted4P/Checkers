@@ -62,7 +62,7 @@ public class Board
             lastMoveDouble = false;
             doMove(xpos, ypos, newXPos, newYPos);
             kingPromoter(newXPos, newYPos);
-            
+            if(turnProc.wasMoveCapture()) makeCapture(turnProc);
             
             if(turnProc.wasMoveCapture() && doubleMove(newXPos, newYPos)){
                 lastMoveDouble = true;
