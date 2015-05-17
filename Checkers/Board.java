@@ -29,7 +29,7 @@ public class Board
                 board[i][j] = new Piece(false);                          //Initialise black pieces
     }
 
-    public boolean isValidSelection(int xpos, int ypos){                 //If the selected piece is owned by the current player's turn
+    private boolean isValidSelection(int xpos, int ypos){                 //If the selected piece is owned by the current player's turn
         if(board[xpos][ypos]==null) return false;
         return board[xpos][ypos].getIsWhite()==whiteTurn;                  //Return if the board piece is a white one == the current player turn;
     }
