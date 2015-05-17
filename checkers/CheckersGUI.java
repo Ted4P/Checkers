@@ -14,19 +14,17 @@ import java.awt.event.*;
  * @author hyunchoi98
  */
 public class CheckersGUI extends javax.swing.JFrame  {
-    public Board board;
+    //keeps track of a Board, a 2d array of JLabels to represent each tile, and JPanel to store the tiles
+    public Board board; 
     private JLabel[][] GUIboard;
 
     private JPanel boardGUI;
 
-    private boolean selected = false;
+    private boolean selected = false; //if a piece is selected or not
 
-    private int[][] currentSelected;
+    private int[][] currentSelected; //coordinates of the selected piece and the target area
 
-    private JLabel boardBackground;
-
-    private final int BASELINE = 42;
-    private final int MULTIPLIER = 62;
+    private final int MULTIPLIER = 62; //width of one tile
 
     /**
      * Creates new form CheckersGUI
@@ -47,24 +45,26 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         currentSelected = new int[2][2];
         boardGUI = new JPanel();
-        boardGUI.setLayout(new GridLayout(8,8));
-        boardGUI.addMouseListener(new MouseAdapter() {
+        boardGUI.setLayout(new GridLayout(8,8)); //tiles in a GridLayout of 8x8
+        boardGUI.addMouseListener(new MouseAdapter() { //essence of the GUI's click detection
 
                 int selected =0;
 
                 public void mouseClicked(MouseEvent e) {
 
-                    if (selected==0)
+                    if (selected==0) //if nothing is selected
                     {
-                        currentSelected[0]=arrayCoord(pressed(e));
+                        currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
                         selected++;
+                        
+                        //if invalid selection, revert
                         if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
                             System.out.println("INVALID MOVE");
                             currentSelected = new int[2][2];
                             selected=0;
                         }
                     }
-                    else if (selected ==1)
+                    else if (selected ==1) //target tile
                     {
                         currentSelected[1]=arrayCoord(pressed(e));
                         move(currentSelected);
@@ -74,7 +74,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         renderBoard();
                         System.out.println("RENDER BOARD");
 
-                        currentSelected = new int[2][2];
+                        currentSelected = new int[2][2]; //revert
                         selected=0;
                     }
 
@@ -96,10 +96,10 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     }
 
-    public void renderBoard()
+    public void renderBoard() //method to arrange images to form the board
     {
 
-        boolean previousColorIsWhite = false;
+        boolean previousColorIsWhite = false; //for arrangement
 
         for (int i = 0; i < 8; i++)
         {
@@ -107,7 +107,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
             {
                 if (board.getPiece(i,j) != null)
                 {
-                    if (board.getPiece(i,j).getIsWhite())
+                    if (board.getPiece(i,j).getIsWhite())//if the piece is white
                     {
                         if (board.getPiece(i,j).getIsKing())
                             GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteking.png")));
@@ -125,7 +125,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
                     previousColorIsWhite=true;
                 }
-                else //if no piece, then blank tile
+                else //if no piece, then blank tile (white or green)
                 {
                     if (previousColorIsWhite)
                         GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/greentile.png")));
@@ -143,30 +143,28 @@ public class CheckersGUI extends javax.swing.JFrame  {
         panel.add(boardGUI);
         panel.setLocation(42,42);
 
-        getContentPane().add(panel);
-
-        //boardGUI.addMouseListener(this);
+        getContentPane().add(panel); //add panel to window
 
         pack();
-        this.setVisible(true);
+        this.setVisible(true);//make it visible
 
     }
 
-    private int[] pressed(MouseEvent e)
+    private int[] pressed(MouseEvent e) //method to return pixel coordinates
     {
 
         Component c = boardGUI.findComponentAt(e.getX(), e.getY());
 
         int[] coordinates = new int[2]; //[x,y]
 
-        System.out.println(e.getX() + "," + e.getY());
+            System.out.println(e.getX() + "," + e.getY()); //debug
 
         coordinates[0] = e.getX();
         coordinates[1] = e.getY();
         return coordinates; 
     }
 
-    private int[] arrayCoord(int[] pixelCoord)
+    private int[] arrayCoord(int[] pixelCoord) //method to return coordinates within the checkerboard, limited to [0,0] to [7,7]
     {
         int[] newArr = new int[2];
 
@@ -176,17 +174,18 @@ public class CheckersGUI extends javax.swing.JFrame  {
         return newArr;
     }
 
-    private void move(int[][] currentSelected)
+    private void move(int[][] currentSelected) //moves the pieces in the Board variable
     {
         board.makeMove(currentSelected[0][1],currentSelected[0][0],currentSelected[1][1],currentSelected[1][0]);
 
         System.out.println(currentSelected[0][0]+","+currentSelected[0][1] + " to " + currentSelected[1][0] + "," + currentSelected[1][1]);
     }
 
-    public static void tester (String[] args)
+    public static void run () //runs the game with debugging console
     {
         CheckersGUI gui = new CheckersGUI();
 
+        
         gui.board.printArr();
 
         gui.renderBoard();
