@@ -1,38 +1,40 @@
 
 /**
+ * Write a description of class Board here.
  * 
- * @author Ted Pyne, Hyun Choi, Patrick Forelli 
+ * @author (your name) 
  * @version (a version number or a date)
  */
 public class Board
 {
-    private Piece[][] board;											//Board state, represented by a 2D array of Piece objects
-    private boolean whiteTurn;                                          //Current player turn is tracked in board to enable double-move logic
-    private boolean lastMoveDouble;										//If the last move allowed a double move, store persistently across turn
-    private int lastX, lastY;											//During the second phase of a double move, the player must select the piece they moved in the first phase
+    private Piece[][] board;
+    private boolean whiteTurn;                                                   //White has even numbered turns, black odd
+    private boolean captureMade;
+    private boolean lastMoveDouble;
+    private int lastX, lastY;
 
     public Board(){
         board = new Piece[8][8];
-        whiteTurn = true;	//Start with white
+        whiteTurn = true;
         addPieces();
     }
 
     private void addPieces(){
-        for(int i = 0; i < 3; i++)	//Correct white rows
+        for(int i = 0; i < 3; i++)
             for(int j = i%2; j < board[0].length; j += 2)
                 board[i][j] = new Piece(true);                          //Initialise White pieces
 
-        for(int i = 7; i > 4; i--)	//Correct black rows
+        for(int i = 7; i > 4; i--)
             for(int j = i%2; j < board[0].length; j += 2)
                 board[i][j] = new Piece(false);                          //Initialise black pieces
     }
 
     public boolean isValidSelection(int xpos, int ypos){                 //If the selected piece is owned by the current player's turn
         if(board[xpos][ypos]==null) return false;
-        return board[xpos][ypos].getIsWhite()==whiteTurn;                  //Compare piece color to current turn
+        return board[xpos][ypos].getIsWhite()==whiteTurn;                  //Return if the board piece is a white one == the current player turn;
     }
 
-    public boolean isEmpty(int xpos, int ypos){	//return if a selection is empty
+    public boolean isEmpty(int xpos, int ypos){
         System.out.println("IN ISEMPTY");
         return board[xpos][ypos]==null;
     }
@@ -45,29 +47,29 @@ public class Board
     }
 
     /**
-     * makeMove does NOT perform array bounds checking; all input params are assumed to be 0<=i<=7
+     * private methods to check for move validity for different colors
      */
     public boolean makeMove(int xpos, int ypos, int newXPos, int newYPos){
-        TurnProcessor turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);				//Create new turnProcessor
-        if(lastMoveDouble){			//If this move is the second phase of a double move
-            if(xpos!=lastX && ypos !=lastY) return false;		//If the player selects a different piece, return false
-            turnProc.isValidTurn();								//Process coordinates
-            if(!turnProc.wasMoveCapture()) return false;		//If the move was not a capture move, return false
+        TurnProcessor turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);
+        if(lastMoveDouble){
+            if(xpos!=lastX && ypos !=lastY) return false;
+            turnProc.isValidTurn();
+            if(!turnProc.wasMoveCapture()) return false;
         }
-        else if(!isValidSelection(xpos, ypos)) return false;	//If the move selection is invalid, return false
-        if(!isEmpty(newXPos,newYPos)) return false;				//If the move target is not empty, return false
-        if(turnProc.isValidTurn()){	//If a valid move
+        else if(!isValidSelection(xpos, ypos)) return false;
+        if(board[newXPos][newYPos]!=null) return false;
+        if(turnProc.isValidTurn()){
             lastMoveDouble = false;
-            doMove(xpos, ypos, newXPos, newYPos);	//Actually perform the moving of the piece
-            kingPromoter(newXPos, newYPos);			//If the piece has reached the end, promote to king
-            if(turnProc.wasMoveCapture()) makeCapture(turnProc);	//If the move involved a capture, make that capture
+            doMove(xpos, ypos, newXPos, newYPos);
+            kingPromoter(newXPos, newYPos);
+            if(turnProc.wasMoveCapture()) makeCapture(turnProc);
             
-            if(turnProc.wasMoveCapture() && doubleMove(newXPos, newYPos)){	//If a double move is possible
+            if(turnProc.wasMoveCapture() && doubleMove(newXPos, newYPos)){
                 lastMoveDouble = true;
-                lastX = newXPos;	//Store the Piece's coordinates
+                lastX = newXPos;
                 lastY = newYPos;
             }
-            else nextPlayer();		//Else change player turn
+            else nextPlayer();
             return true;
         }
         return false;
@@ -78,14 +80,14 @@ public class Board
         board[xpos][ypos] = null;
     }
 
-    private boolean doubleMove(int xpos, int ypos){                             //Return if another capture is possible
+    private boolean doubleMove(int xpos, int ypos){                             //if another capture is possible
         int[] newXP = {xpos + 2, xpos - 2};
         int[] newYP = {ypos + 2, ypos - 2};
         for(int x: newXP)
             for(int y: newYP)
                 if(x > -1 && y > -1 && x < board.length && y < board.length && isEmpty(x,y)){
-                    TurnProcessor turnProc = new TurnProcessor(xpos, ypos, x, y, this);			//Check if the move is valid
-                    if(turnProc.isValidTurn() && turnProc.wasMoveCapture()) return true;		//If a move is a valid capture move, return true
+                    TurnProcessor turnProc = new TurnProcessor(xpos, ypos, x, y, this);
+                    if(turnProc.isValidTurn()) return true;
                 }
         return false;
     }
