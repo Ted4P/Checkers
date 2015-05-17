@@ -187,7 +187,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
     {
         CheckersGUI gui = new CheckersGUI();
 
-        gui.board.makeMove(2,0,3,1);
         gui.board.printArr();
 
         gui.renderBoard();
