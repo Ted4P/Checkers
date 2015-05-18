@@ -160,21 +160,20 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         int[] coordinates = new int[2]; //[x,y]
 
-            System.out.println(e.getX() + "," + e.getY()); //debug
+        System.out.println(e.getX() + "," + e.getY()); //debug
 
         coordinates[0] = e.getX();
         coordinates[1] = e.getY();
-        return coordinates; 
+        return coordinates;
     }
 
     private int[] arrayCoord(int[] pixelCoord) //method to return coordinates within the checkerboard, limited to [0,0] to [7,7]
     {
-        int[] newArr = new int[2];
 
         for (int i=0; i<2; i++)
-            newArr[i] = pixelCoord[i]/MULTIPLIER;
+            pixelCoord[i] /= MULTIPLIER;
 
-        return newArr;
+        return pixelCoord;
     }
 
     private void move(int[][] currentSelected) //moves the pieces in the Board variable
@@ -187,10 +186,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
     public static void run () //runs the game with debugging console
     {
         CheckersGUI gui = new CheckersGUI();
-
-        
         gui.board.printArr();
-
         gui.renderBoard();
 
     }
