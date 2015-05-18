@@ -18,17 +18,22 @@ public class TurnProcessor
     }
 
     public boolean isValidTurn(){
+
         moveIsCapture = false;
         boolean valid = false;
         if(board.getPiece(x,y).getIsKing() && kingValidMove()){
+
             return true;
         }
         else if(board.getPiece(x,y).getIsWhite() && whiteValidMove()){
+
             return true;
         }
-        else if (blackValidMove()){
+        else if (!board.getPiece(x,y).getIsWhite() && blackValidMove()){
+
             return true;
         }
+
         return false;
     }
 
@@ -37,11 +42,10 @@ public class TurnProcessor
     }
 
     private boolean whiteValidMove(){
-        System.out.println("IN WHITEVALIDMOVE, " + x + " " + y + " " + newX + " " + newY + " " + (x - newX == -1));
+
         if(x - newX == -1 && Math.abs(y - newY)==1)  {System.out.println("VALID"); return true;}                  //If it is "down" the board one in either direction
         if(x - newX == -2 && Math.abs(y - newY)==2 && isValidCapture()){
-            System.out.println("")
-			moveIsCapture = true;
+            moveIsCapture = true;
             return true;
         }
         return false;
@@ -57,7 +61,7 @@ public class TurnProcessor
     }
 
     private boolean kingValidMove(){
-        System.out.println("IN KINGVALIDMOVE");
+
         if(Math.abs(x - newX)==1&& Math.abs(y - newY)==1) return true;              //No direction checking is required
         if(Math.abs(x - newX)==2&& Math.abs(y - newY)==2 && isValidCapture()) {
             moveIsCapture = true; 
