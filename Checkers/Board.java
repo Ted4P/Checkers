@@ -73,24 +73,24 @@ public class Board
         return false;
     }
     
-    private void doMove(int xpos, int ypos, int newXPos, int newYPos){
+    private void doMove(int xpos, int ypos, int newXPos, int newYPos){			//No checks whatsoever, just move the piece
         board[newXPos][newYPos] = board[xpos][ypos];
         board[xpos][ypos] = null;
     }
 
-    private boolean doubleMove(int xpos, int ypos){                             //Return if another capture is possible
+    private boolean doubleMove(int xpos, int ypos){                             //Return true if another capture is possible
         int[] newXP = {xpos + 2, xpos - 2};
         int[] newYP = {ypos + 2, ypos - 2};
         for(int x: newXP)
             for(int y: newYP)
-                if(x > -1 && y > -1 && x < board.length && y < board.length && isEmpty(x,y)){
+                if(x > -1 && y > -1 && x < board.length && y < board.length && isEmpty(x,y)){	//Make sure the x and y are valid indices
                     TurnProcessor turnProc = new TurnProcessor(xpos, ypos, x, y, this);			//Check if the move is valid
                     if(turnProc.isValidTurn() && turnProc.wasMoveCapture()) return true;		//If a move is a valid capture move, return true
                 }
         return false;
     }
 
-    private void kingPromoter(int xpos, int ypos){
+    private void kingPromoter(int xpos, int ypos){	//If a piece has reached the opposite side, promote it to a king
         if(board[xpos][ypos].getIsWhite() && xpos == board.length -1) board[xpos][ypos].makeKing();
         else if(!board[xpos][ypos].getIsWhite() && xpos == 0) board[xpos][ypos].makeKing();
     }
@@ -99,7 +99,7 @@ public class Board
         whiteTurn = !whiteTurn;
     }
 
-    private void makeCapture(TurnProcessor turnProc){
+    private void makeCapture(TurnProcessor turnProc){ //Delete the target of a capture
         int[] middle = turnProc.getCaptureTarget();
         board[middle[0]][middle[1]]=null;
     }
@@ -121,7 +121,7 @@ public class Board
     }
 
     /**
-     * Degugging method: Print board to console
+     * Debugging method: Print board to console
      */
     public void printArr(){
         for(int i = 0; i < board.length; i++){
