@@ -144,6 +144,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         panel.setLocation(42,42);
 
         getContentPane().add(panel); //add panel to window
+        this.setResizable(false);
 
         pack();
         this.setVisible(true);//make it visible
