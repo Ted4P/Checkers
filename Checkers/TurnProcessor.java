@@ -37,10 +37,11 @@ public class TurnProcessor
     }
 
     private boolean whiteValidMove(){
-        System.out.println("IN WHITEVALIDMOVE");
+        System.out.println("IN WHITEVALIDMOVE, " + x + " " + y + " " + newX + " " + newY);
         if(x - newX == -1 && Math.abs(y - newY)==1)  return true;                    //If it is "down" the board one in either direction
         if(x - newX == -2 && Math.abs(y - newY)==2 && isValidCapture()){
-            moveIsCapture = true;
+            System.out.println("")
+			moveIsCapture = true;
             return true;
         }
         return false;

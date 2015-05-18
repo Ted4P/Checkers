@@ -49,7 +49,7 @@ public class Board
      */
     public boolean makeMove(int xpos, int ypos, int newXPos, int newYPos){
         TurnProcessor turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);				//Create new turnProcessor
-        if(lastMoveDouble){			//If this move is the second phase of a double move
+        if(lastMoveDouble){										//If this move is the second phase of a double move
             if(xpos!=lastX && ypos !=lastY) return false;		//If the player selects a different piece, return false
             turnProc.isValidTurn();								//Process coordinates
             if(!turnProc.wasMoveCapture()) return false;		//If the move was not a capture move, return false
