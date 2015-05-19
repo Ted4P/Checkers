@@ -31,6 +31,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
      */
     public CheckersGUI() {
         board = new Board();
+                                            board.debugMode(); //debugging win banner
 
         GUIboard = new JLabel[8][8];
         for (int i = 0; i < 8; i++)
@@ -70,13 +71,41 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         move(currentSelected);
                         System.out.println("MOVE");
                         board.printArr();
-
+                        
                         renderBoard();
                         System.out.println("RENDER BOARD");
-
+                        
+                        if (board.gameIsWon()!=null)
+                        {
+                            
+                            
+                            
+                            System.out.println("gameIsWon");
+                            
+                            JLabel banner = new JLabel();
+                            if (board.gameIsWon().getIsWhite())  
+                            {    
+                                System.out.println("gameIsWon by white");
+                                banner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitevictory.png")));
+                            }
+                            else
+                            {
+                                System.out.println("gameIsWon by black");
+                                banner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/blackvictory.png")));
+                            }
+                            
+                            getContentPane().add(banner);
+                            
+                            this.pack();
+                                
+                        }
+                        
+                        
                         currentSelected = new int[2][2]; //revert
                         selected=0;
+
                     }
+                         
 
                     //debugging
 
@@ -88,7 +117,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     }
                     System.out.println();
 
-                }
+                    }
 
             });
         //do this last
@@ -148,8 +177,8 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         
         this.setVisible(true);//make it visible
-		this.setContentPane(panel);
-		this.pack();
+        this.setContentPane(panel);
+        this.pack();
 
     }
 

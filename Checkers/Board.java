@@ -85,6 +85,23 @@ public class Board
         }
         return false;
     }
+<<<<<<< Updated upstream
+=======
+    
+    /**
+    public void makeAIMove(){
+        TurnProcessor turnProc;
+        while(true){
+        int row = (int)(Math.random() * 8);
+        int col = (int)(Math.random() * 8);
+        if(isValidSelection(row,col){
+            turnProc
+        
+        }
+        }
+    }
+    */
+>>>>>>> Stashed changes
 
     private void doMove(int xpos, int ypos, int newXPos, int newYPos){          //No checks whatsoever, just move the piece
         board[newXPos][newYPos] = board[xpos][ypos];
