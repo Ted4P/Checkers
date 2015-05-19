@@ -56,7 +56,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     {
                         currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
                         selected++;
-                        
+
                         //if invalid selection, revert
                         if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
                             System.out.println("INVALID MOVE");
@@ -71,6 +71,10 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         System.out.println("MOVE");
                         board.printArr();
 
+                        if (board.gameIsWon()!=null)
+                        {
+
+                        }
                         renderBoard();
                         System.out.println("RENDER BOARD");
 
@@ -96,7 +100,9 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     }
 
-    public void renderBoard() //method to arrange images to form the board
+    publ
+
+    ic void renderBoard() //method to arrange images to form the board
     {
 
         boolean previousColorIsWhite = false; //for arrangement
@@ -146,14 +152,15 @@ public class CheckersGUI extends javax.swing.JFrame  {
         getContentPane().add(panel); //add panel to window
         this.setResizable(false);
 
-        
         this.setVisible(true);//make it visible
-		this.setContentPane(panel);
-		this.pack();
+        this.setContentPane(panel);
+        this.pack();
 
     }
 
-    private int[] pressed(MouseEvent e) //method to return pixel coordinates
+    priv
+
+    ate int[] pressed(MouseEvent e) //method to return pixel coordinates
     {
 
         Component c = boardGUI.findComponentAt(e.getX(), e.getY());
@@ -167,7 +174,9 @@ public class CheckersGUI extends javax.swing.JFrame  {
         return coordinates;
     }
 
-    private int[] arrayCoord(int[] pixelCoord) //method to return coordinates within the checkerboard, limited to [0,0] to [7,7]
+    priv
+
+    ate int[] arrayCoord(int[] pixelCoord) //method to return coordinates within the checkerboard, limited to [0,0] to [7,7]
     {
 
         for (int i=0; i<2; i++)
@@ -176,14 +185,18 @@ public class CheckersGUI extends javax.swing.JFrame  {
         return pixelCoord;
     }
 
-    private void move(int[][] currentSelected) //moves the pieces in the Board variable
+    priv
+
+    ate void move(int[][] currentSelected) //moves the pieces in the Board variable
     {
         board.makeMove(currentSelected[0][1],currentSelected[0][0],currentSelected[1][1],currentSelected[1][0]);
 
         System.out.println(currentSelected[0][0]+","+currentSelected[0][1] + " to " + currentSelected[1][0] + "," + currentSelected[1][1]);
     }
 
-    public static void run () //runs the game with debugging console
+    publ
+
+    ic static void run () //runs the game with debugging console
     {
         CheckersGUI gui = new CheckersGUI();
         gui.board.printArr();
