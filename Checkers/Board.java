@@ -113,8 +113,8 @@ public class Board
 
     public Piece gameIsWon(){                                            //If white has won, return a white piece, if black has won, return black, else return null
         if(blackLeft!=0 && whiteLeft!=0) return  null;
-        if(blackLeft==0) return new Piece(false);
-        return new Piece(true);
+        if(blackLeft==0) return new Piece(true);
+        return new Piece(false);
     }
 
     /**
