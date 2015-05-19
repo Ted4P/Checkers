@@ -11,11 +11,23 @@ public class Board
     private boolean lastMoveDouble;                                     //If the last move allowed a double move, store persistently across turn
     private int lastX, lastY;                                           //During the second phase of a double move, the player must select the piece they moved in the first phase
     private int blackLeft, whiteLeft;                                   //Number of pieces remaining
+    private boolean isAI;
 
-    public Board(){
+    public Board(boolean isAI){
         board = new Piece[8][8];
         whiteTurn = true;   //Start with white
+        this.isAI = isAI;
         addPieces();        //Add pieces to the board
+    }
+    
+    public Board(){
+        this(false);
+    }
+    
+    public void debugMode(){
+        board = new Piece[8][8];
+        board[0][0] = new Piece(true); 
+        board[1][1] = new Piece(false);
     }
 
     private void addPieces(){
@@ -53,6 +65,8 @@ public class Board
      * makeMove does NOT perform array bounds checking; all input params are assumed to be 0<=i<=7
      */
     public boolean makeMove(int xpos, int ypos, int newXPos, int newYPos){
+        if(isAI && !whiteTurn) return false;
+        
         TurnProcessor turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);             //Create new turnProcessor
         if(lastMoveDouble){                                     //If this move is the second phase of a double move
             if(xpos!=lastX && ypos !=lastY) return false;       //If the player selects a different piece, return false
@@ -76,6 +90,17 @@ public class Board
             return true;
         }
         return false;
+    }
+    
+    public void makeAIMove(){
+        /*TurnProcessor turnProc;
+        while(true){
+        int row = (int)(Math.random() * 8);
+        turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);
+        
+        
+        
+    }*/
     }
 
     private void doMove(int xpos, int ypos, int newXPos, int newYPos){          //No checks whatsoever, just move the piece
