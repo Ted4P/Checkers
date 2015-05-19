@@ -6,25 +6,30 @@
  */
 public class Board
 {
-    private Piece[][] board;											//Board state, represented by a 2D array of Piece objects
+    private Piece[][] board;                                            //Board state, represented by a 2D array of Piece objects
     private boolean whiteTurn;                                          //Current player turn is tracked in board to enable double-move logic
-    private boolean lastMoveDouble;										//If the last move allowed a double move, store persistently across turn
-    private int lastX, lastY;											//During the second phase of a double move, the player must select the piece they moved in the first phase
+    private boolean lastMoveDouble;                                     //If the last move allowed a double move, store persistently across turn
+    private int lastX, lastY;                                           //During the second phase of a double move, the player must select the piece they moved in the first phase
+    private int blackLeft, whiteLeft;                                   //Number of pieces remaining
 
     public Board(){
         board = new Piece[8][8];
-        whiteTurn = true;	//Start with white
-        addPieces();
+        whiteTurn = true;   //Start with white
+        addPieces();        //Add pieces to the board
     }
 
     private void addPieces(){
-        for(int i = 0; i < 3; i++)	//Correct white rows
-            for(int j = i%2; j < board[0].length; j += 2)
+        for(int i = 0; i < 3; i++)  //Correct white rows
+            for(int j = i%2; j < board[0].length; j += 2){
                 board[i][j] = new Piece(true);                          //Initialise White pieces
+                whiteLeft++;
+            }
 
-        for(int i = 7; i > 4; i--)	//Correct black rows
-            for(int j = i%2; j < board[0].length; j += 2)
+        for(int i = 7; i > 4; i--)  //Correct black rows
+            for(int j = i%2; j < board[0].length; j += 2){
                 board[i][j] = new Piece(false);                          //Initialise black pieces
+                blackLeft++;
+            }
     }
 
     public boolean isValidSelection(int xpos, int ypos){                 //If the selected piece is owned by the current player's turn
@@ -32,7 +37,7 @@ public class Board
         return board[xpos][ypos].getIsWhite()==whiteTurn;                  //Compare piece color to current turn
     }
 
-    public boolean isEmpty(int xpos, int ypos){	//return if a selection is empty
+    public boolean isEmpty(int xpos, int ypos){ //return if a selection is empty
         System.out.println("IN ISEMPTY");
         return board[xpos][ypos]==null;
     }
@@ -48,32 +53,32 @@ public class Board
      * makeMove does NOT perform array bounds checking; all input params are assumed to be 0<=i<=7
      */
     public boolean makeMove(int xpos, int ypos, int newXPos, int newYPos){
-        TurnProcessor turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);				//Create new turnProcessor
-        if(lastMoveDouble){										//If this move is the second phase of a double move
-            if(xpos!=lastX && ypos !=lastY) return false;		//If the player selects a different piece, return false
-            turnProc.isValidTurn();								//Process coordinates
-            if(!turnProc.wasMoveCapture()) return false;		//If the move was not a capture move, return false
+        TurnProcessor turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);             //Create new turnProcessor
+        if(lastMoveDouble){                                     //If this move is the second phase of a double move
+            if(xpos!=lastX && ypos !=lastY) return false;       //If the player selects a different piece, return false
+            turnProc.isValidTurn();                             //Process coordinates
+            if(!turnProc.wasMoveCapture()) return false;        //If the move was not a capture move, return false
         }
-        else if(!isValidSelection(xpos, ypos)) return false;	//If the move selection is invalid, return false
-        if(!isEmpty(newXPos,newYPos)) return false;				//If the move target is not empty, return false
-        if(turnProc.isValidTurn()){	//If a valid move
+        else if(!isValidSelection(xpos, ypos)) return false;    //If the move selection is invalid, return false
+        if(!isEmpty(newXPos,newYPos)) return false;             //If the move target is not empty, return false
+        if(turnProc.isValidTurn()){ //If a valid move
             lastMoveDouble = false;
-            doMove(xpos, ypos, newXPos, newYPos);	//Actually perform the moving of the piece
-            kingPromoter(newXPos, newYPos);			//If the piece has reached the end, promote to king
-            if(turnProc.wasMoveCapture()) makeCapture(turnProc);	//If the move involved a capture, make that capture
-            
-            if(turnProc.wasMoveCapture() && doubleMove(newXPos, newYPos)){	//If a double move is possible
+            doMove(xpos, ypos, newXPos, newYPos);   //Actually perform the moving of the piece
+            kingPromoter(newXPos, newYPos);         //If the piece has reached the end, promote to king
+            if(turnProc.wasMoveCapture()) makeCapture(turnProc);    //If the move involved a capture, make that capture
+
+            if(turnProc.wasMoveCapture() && doubleMove(newXPos, newYPos)){  //If a double move is possible
                 lastMoveDouble = true;
-                lastX = newXPos;	//Store the Piece's coordinates
+                lastX = newXPos;    //Store the Piece's coordinates
                 lastY = newYPos;
             }
-            else nextPlayer();		//Else change player turn
+            else nextPlayer();      //Else change player turn
             return true;
         }
         return false;
     }
-    
-    private void doMove(int xpos, int ypos, int newXPos, int newYPos){			//No checks whatsoever, just move the piece
+
+    private void doMove(int xpos, int ypos, int newXPos, int newYPos){          //No checks whatsoever, just move the piece
         board[newXPos][newYPos] = board[xpos][ypos];
         board[xpos][ypos] = null;
     }
@@ -83,14 +88,14 @@ public class Board
         int[] newYP = {ypos + 2, ypos - 2};
         for(int x: newXP)
             for(int y: newYP)
-                if(x > -1 && y > -1 && x < board.length && y < board.length && isEmpty(x,y)){	//Make sure the x and y are valid indices
-                    TurnProcessor turnProc = new TurnProcessor(xpos, ypos, x, y, this);			//Check if the move is valid
-                    if(turnProc.isValidTurn() && turnProc.wasMoveCapture()) return true;		//If a move is a valid capture move, return true
-                }
+                if(x > -1 && y > -1 && x < board.length && y < board.length && isEmpty(x,y)){   //Make sure the x and y are valid indices
+                    TurnProcessor turnProc = new TurnProcessor(xpos, ypos, x, y, this);         //Check if the move is valid
+                    if(turnProc.isValidTurn() && turnProc.wasMoveCapture()) return true;        //If a move is a valid capture move, return true
+        }
         return false;
     }
 
-    private void kingPromoter(int xpos, int ypos){	//If a piece has reached the opposite side, promote it to a king
+    private void kingPromoter(int xpos, int ypos){  //If a piece has reached the opposite side, promote it to a king
         if(board[xpos][ypos].getIsWhite() && xpos == board.length -1) board[xpos][ypos].makeKing();
         else if(!board[xpos][ypos].getIsWhite() && xpos == 0) board[xpos][ypos].makeKing();
     }
@@ -101,22 +106,14 @@ public class Board
 
     private void makeCapture(TurnProcessor turnProc){ //Delete the target of a capture
         int[] middle = turnProc.getCaptureTarget();
+        if(board[middle[0]][middle[1]].getIsWhite()) whiteLeft--;
+        else blackLeft--;
         board[middle[0]][middle[1]]=null;
     }
 
     public Piece gameIsWon(){                                            //If white has won, return a white piece, if black has won, return black, else return null
-        boolean blackAlive = false, whiteAlive = false;
-        for(Piece[] row: board){
-            for(Piece space: row){
-                if(space!=null){
-                    if(space.getIsWhite()) whiteAlive = true;
-                    else blackAlive = true;
-                }
-            }
-        }
-
-        if(blackAlive && whiteAlive) return  null;
-        if(blackAlive) return new Piece(false);
+        if(blackLeft!=0 && whiteLeft!=0) return  null;
+        if(blackLeft==0) return new Piece(false);
         return new Piece(true);
     }
 
