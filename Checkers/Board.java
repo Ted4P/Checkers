@@ -28,6 +28,8 @@ public class Board
         board = new Piece[8][8];
         board[0][0] = new Piece(true); 
         board[1][1] = new Piece(false);
+        blackLeft=1;
+        whiteLeft=1;
     }
 
     private void addPieces(){
@@ -93,14 +95,15 @@ public class Board
     }
     
     public void makeAIMove(){
-        /*TurnProcessor turnProc;
+        TurnProcessor turnProc;
         while(true){
         int row = (int)(Math.random() * 8);
-        turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);
+        int col = (int)(Math.random() * 8);
+        if(isValidSelection(row,col){
+            turnProc
         
-        
-        
-    }*/
+        }
+        }
     }
 
     private void doMove(int xpos, int ypos, int newXPos, int newYPos){          //No checks whatsoever, just move the piece
