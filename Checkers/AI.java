@@ -7,13 +7,13 @@ public class AI{
     public boolean makeMove(){
         if(board.isWhiteTurn()) return false; 
         //First attempt a capture move
-		//Create a random list of rows and cols to try
-		int[] rows = {0,1,2,3,4,5,6,7};
-		int[] cols = {0,1,2,3,4,5,6,7}
-		scrambleArr(rows);
-		scrambleArr(cols);
+        //Create a random list of rows and cols to try
+        int[] rows = {0,1,2,3,4,5,6,7};
+        int[] cols = {0,1,2,3,4,5,6,7};
+        scrambleArr(rows);
+        scrambleArr(cols);
         
-		for(int x: rows){
+        for(int x: rows){
             for(int y: cols){
                 if(board.isValidSelection(x,y)){
                     int[] newX = {x+2, x-2};
@@ -24,11 +24,10 @@ public class AI{
                 }
             }
         }
-		for(int x: rows){
+        for(int x: rows){
             for(int y: cols){
                 if(board.isValidSelection(x,y)){
                     System.out.println("VALID SELECTION");
-					int[] newX = {x+2, x-2};
                     int[] newY = {y+2, y-2};
                     for(int tryX: newX)
                         for(int tryY: newY)
@@ -55,15 +54,4 @@ public class AI{
     private boolean validTarget(int x, int y){
     return x > -1 && x < 8 && y > -1 && y < 8;
     }
-	
-	private void scrambleArr(int[] arr){
-		for(int i = 0; i < 8; i++){
-			int sPos = (int)(Math.random()*8);
-			int ePos = (int)(Math.random()*8);
-			int temp = arr[ePos];
-			arr[ePos] = arr[sPos];
-			arr[sPos] = temp;
-		}
-	}
-	
 }
