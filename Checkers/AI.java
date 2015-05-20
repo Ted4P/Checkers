@@ -33,7 +33,7 @@ public class AI{
                     int[] newY = {y+2, y-2};
                     for(int tryX: newX)
                         for(int tryY: newY)
-                            if(validTarget(tryX, tryY) && board.makeMove(x,x,tryX,tryY)) return true;
+                            if(validTarget(tryX, tryY)){System.out.println("VALID TARGET");  if(board.makeMove(x,x,tryX,tryY)) return true;}
 				}
 			}
 		}
