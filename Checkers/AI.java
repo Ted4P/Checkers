@@ -27,15 +27,15 @@ public class AI{
         for(int x: rows){
             for(int y: cols){
                 if(board.isValidSelection(x,y)){
-                    System.out.println("VALID SELECTION");
-                    int[] newY = {y+2, y-2};
+                    int[] newX = {x+1, x-1};
+                    int[] newY = {y+1, y-1};
                     for(int tryX: newX)
                         for(int tryY: newY)
                             if(validTarget(tryX, tryY) && board.makeMove(x,y,tryX,tryY)) return true;
-				}
-			}
-		}
-		return false;
+                }
+            }
+        }
+        return false;
     }
 
     private boolean calcCapture(int x, int y, int capX, int capY){
@@ -48,10 +48,21 @@ public class AI{
                     for(int tryY: newY)
                         if(validTarget(tryX, tryY) && calcCapture(x,y,tryX,tryY)) return true;
             }
-        return false;
+            return false;
     }
     
     private boolean validTarget(int x, int y){
-    return x > -1 && x < 8 && y > -1 && y < 8;
+        return x > -1 && x < 8 && y > -1 && y < 8;
     }
+    
+    private void scrambleArr(int[] arr){
+        for(int i = 0; i < 8; i++){
+            int sPos = (int)(Math.random()*8);
+            int ePos = (int)(Math.random()*8);
+            int temp = arr[ePos];
+            arr[ePos] = arr[sPos];
+            arr[sPos] = temp;
+        }
+    }
+    
 }
