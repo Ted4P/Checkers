@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,22 +6,27 @@ import java.awt.event.*;
 
 /**
  *
- * @author hyunchoi98
+ * @author Hyun Choi, Ted Pyne, Patrick Forelli
  */
 public class CheckersGUI extends javax.swing.JFrame  {
     //keeps track of a Board, a 2d array of JLabels to represent each tile, and JPanel to store the tiles
     public Board board; 
     private JLabel[][] GUIboard;
 
+    //JPanel entireGUI for the enclosure of both the board and the text
     private JPanel entireGUI;
+    
+    //outer JPanel panel for the outer board panel, boardGUI for the inner board panel
     private JPanel panel;
         private JPanel boardGUI;
         
+    //JPanel for textual info; JLabels/JButton for information and toggling
     private JPanel text;
         private JLabel victoryStatus;
         private JLabel turnStatus;
         private JButton aiToggle;
 
+    //AI implementation
     private AI ai; 
     private boolean aiActive;
 
@@ -80,16 +81,19 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     }
                     else if (selected ==1) //target tile
                     {
+                        //using the coordinates, make a move and render the board on the GUI
                         currentSelected[1]=arrayCoord(pressed(e));
                         move(currentSelected);
                         renderBoard();
 
-                        if (ai!=null)
+                        if (ai!=null) //make AI move if AI is active
                         {
                             ai.makeMove();
                             renderBoard();
                         }
-                        currentSelected = new int[2][2]; //revert
+                        
+                        //revert to original state
+                        currentSelected = new int[2][2];
                         selected=0;
 
                     }
@@ -100,7 +104,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
             
         panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
         panel.add(boardGUI);
-        renderBoard();
+        renderBoard(); //render board on the GUI
 
     }
     public void renderBoard() //method to arrange images to form the board
@@ -147,15 +151,18 @@ public class CheckersGUI extends javax.swing.JFrame  {
         }
 
 
-        refreshText();
+        refreshText(); //update the text fields
+        
+        //combine the two components of the GUI
         entireGUI.add(panel);
         entireGUI.add(text);
 
-        setResizable(false);
+        setResizable(false); //window cannot be resized
         
+        //make it visible
         pack();
         this.setContentPane(entireGUI);
-        setVisible(true);//make it visible
+        setVisible(true);
     }
 
     private void initializeText()
@@ -168,7 +175,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         final JLabel AI = new JLabel ("AI STATUS");
         aiToggle = new JButton("AI INACTIVE");
-        aiToggle.addActionListener(new ActionListener() {
+        aiToggle.addActionListener(new ActionListener() { //button for toggling AI activation status
 
                 public void actionPerformed(ActionEvent e)
                 {
@@ -193,13 +200,12 @@ public class CheckersGUI extends javax.swing.JFrame  {
         text.add(TURN);
         text.add(turnStatus);
         text.add(AI);
-
         text.add(aiToggle);
 
     }
     public void refreshText()
     {
-        if (board.gameIsWon()!=null)
+        if (board.gameIsWon()!=null) //set victor if there is one
         {
             if (board.gameIsWon().getIsWhite())  
             {    
@@ -215,7 +221,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
             victoryStatus.setText("???");
         }
 
-        if (board.isWhiteTurn())
+        if (board.isWhiteTurn()) //display turn
             turnStatus.setText("WHITE");
         else
             turnStatus.setText("RED");
@@ -223,7 +229,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         
     }
     
-    private int[] pressed(MouseEvent e) //method to return pixel coordinates
+    private int[] pressed(MouseEvent e) //returns pixel coordinates where clicked
     {
 
         Component c = boardGUI.findComponentAt(e.getX(), e.getY());
@@ -234,7 +240,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         return coordinates;
     }
 
-    private int[] arrayCoord(int[] pixelCoord) //method to return coordinates within the checkerboard, limited to [0,0] to [7,7]
+    private int[] arrayCoord(int[] pixelCoord) //returns coordinates within the checkerboard, limited to [0,0] to [7,7]
     {
 
         for (int i=0; i<2; i++)

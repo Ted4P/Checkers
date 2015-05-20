@@ -1,6 +1,6 @@
 
 /**
- * Write a description of class Piece here.
+ * Defines a Piece object, minimal information stored
  * 
  * @author (your name) 
  * @version (a version number or a date)
