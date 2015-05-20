@@ -27,7 +27,8 @@ public class AI{
 		System.out.println("NOT MAKING A CAPTURE");
 		for(int x: rows){
             for(int y: cols){
-                if(board.isValidSelection(x,y)){	
+                if(board.isValidSelection(x,y)){
+                    System.out.println("VALID SELECTION");
 					int[] newX = {x+2, x-2};
                     int[] newY = {y+2, y-2};
                     for(int tryX: newX)
@@ -36,6 +37,7 @@ public class AI{
 				}
 			}
 		}
+		System.out.println("RETURNING FALSE");
 		return false;
     }
 

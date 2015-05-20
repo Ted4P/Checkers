@@ -36,7 +36,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
      */
     public CheckersGUI() {
         board = new Board();
-                                            board.debugMode(); //debugging win banner
+                                            //board.debugMode(); //debugging win banner
 
         GUIboard = new JLabel[8][8];
         for (int i = 0; i < 8; i++)
