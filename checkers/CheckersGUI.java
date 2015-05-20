@@ -6,6 +6,8 @@
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
+import javax.swing.OverlayLayout;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -20,18 +22,18 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     private JPanel boardGUI;
 
+    private JLayeredPane entireGUI;
+    
+
     private boolean selected = false; //if a piece is selected or not
-
     private int[][] currentSelected; //coordinates of the selected piece and the target area
-
     private final int MULTIPLIER = 62; //width of one tile
-
     /**
      * Creates new form CheckersGUI
      */
     public CheckersGUI() {
         board = new Board();
-                                            board.debugMode(); //debugging win banner
+        board.debugMode(); //debugging win banner
 
         GUIboard = new JLabel[8][8];
         for (int i = 0; i < 8; i++)
@@ -47,6 +49,15 @@ public class CheckersGUI extends javax.swing.JFrame  {
         currentSelected = new int[2][2];
         boardGUI = new JPanel();
         boardGUI.setLayout(new GridLayout(8,8)); //tiles in a GridLayout of 8x8
+        boardGUI.setMinimumSize(new Dimension(MULTIPLIER*8+1, MULTIPLIER*8+1));
+        boardGUI.setMaximumSize(new Dimension(MULTIPLIER*8+1, MULTIPLIER*8+1));
+        
+
+        entireGUI = new JLayeredPane();
+        entireGUI.setLayout(new OverlayLayout(entireGUI));
+        entireGUI.setMinimumSize(new Dimension(MULTIPLIER*8, MULTIPLIER*8));
+
+        
         boardGUI.addMouseListener(new MouseAdapter() { //essence of the GUI's click detection
 
                 int selected =0;
@@ -57,7 +68,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     {
                         currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
                         selected++;
-                        
+
                         //if invalid selection, revert
                         if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
                             System.out.println("INVALID MOVE");
@@ -71,17 +82,14 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         move(currentSelected);
                         System.out.println("MOVE");
                         board.printArr();
-                        
+
                         renderBoard();
                         System.out.println("RENDER BOARD");
-                        
-                        if (board.gameIsWon()!=null)
+
+                        if (board.gameIsWon()!=null) //banner for victories
                         {
-                            
-                            
-                            
                             System.out.println("gameIsWon");
-                            
+
                             JLabel banner = new JLabel();
                             if (board.gameIsWon().getIsWhite())  
                             {    
@@ -94,21 +102,23 @@ public class CheckersGUI extends javax.swing.JFrame  {
                                 banner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/blackvictory.png")));
                             }
                             
-                            getContentPane().add(banner);
+                            System.out.println("ADDING BANNER");
+                            banner.setBounds(0, 0, banner.getPreferredSize().width, banner.getPreferredSize().height);
+                            entireGUI.add(banner,new Integer(0));
                             
-                            this.pack();
-                                
+                            
+                            banner.setVisible(true);
+
+                            
+                            renderBoard();
                         }
-                        
                         
                         currentSelected = new int[2][2]; //revert
                         selected=0;
 
                     }
-                         
 
                     //debugging
-
                     for (int[] curr: currentSelected)
                     {
                         for (int j: curr)
@@ -117,10 +127,12 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     }
                     System.out.println();
 
-                    }
+                }
 
             });
         //do this last
+
+        
         renderBoard();
 
     }
@@ -142,7 +154,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteking.png")));
                         else 
                             GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhite.png")));
-
                     }
                     else //so that means it's a red
                     {
@@ -168,16 +179,27 @@ public class CheckersGUI extends javax.swing.JFrame  {
             previousColorIsWhite=!previousColorIsWhite;
         }
 
+        /**
         JPanel panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
         panel.add(boardGUI);
         panel.setLocation(42,42);
-
-        getContentPane().add(panel); //add panel to window
-        this.setResizable(false);
-
+         */
         
-        this.setVisible(true);//make it visible
-        this.setContentPane(panel);
+        //boardGUI.setBounds(10, 10, MULTIPLIER*8, MULTIPLIER*8);
+        entireGUI.add(boardGUI,new Integer(-1),0);
+        
+        //this.setPreferredSize(new Dimension(MULTIPLIER*8+500, MULTIPLIER*8+50));
+
+        //getContentPane().add(panel); //add panel to window
+        //this.getContentPane().add(entireGUI); //add panel to window
+
+        this.setResizable(true);
+        entireGUI.setPreferredSize(new Dimension(MULTIPLIER*8, MULTIPLIER*8));
+        
+        
+        this.setVisible(true); //make it visible
+        this.add(entireGUI);
+
         this.pack();
 
     }
@@ -219,5 +241,8 @@ public class CheckersGUI extends javax.swing.JFrame  {
         gui.renderBoard();
 
     }
-
+    
+    
+    
+    
 }
