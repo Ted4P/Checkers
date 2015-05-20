@@ -21,7 +21,7 @@ public class Game
         AI ai = new AI(board);
         while(true){
             board.printArr();
-            int x = scan.nextInt();
+            int x = scan.nextInt();            
             int y = scan.nextInt();
             int newX = scan.nextInt();
             int newY = scan.nextInt();

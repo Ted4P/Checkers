@@ -22,9 +22,10 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private JPanel text;
         private JLabel victoryStatus;
         private JLabel turnStatus;
-        private JLabel aiStatus;
+        private JButton aiToggle;
    
-    
+    private AI ai; 
+    private boolean aiActive;
     
     
     private boolean selected = false; //if a piece is selected or not
@@ -36,8 +37,10 @@ public class CheckersGUI extends javax.swing.JFrame  {
      */
     public CheckersGUI() {
         board = new Board();
-                                            //board.debugMode(); //debugging win banner
+                                            //board.debugMode(); //debugging win 
+                                         
 
+        
         GUIboard = new JLabel[8][8];
         for (int i = 0; i < 8; i++)
         {
@@ -52,10 +55,12 @@ public class CheckersGUI extends javax.swing.JFrame  {
         entireGUI = new JPanel(); //outer JPanel to store the boardGUI and the textual information
         entireGUI.setLayout(new BoxLayout(entireGUI, BoxLayout.X_AXIS));
         
+        aiActive = false; //by default, AI is inactive
+        
         text = new JPanel(); //inner JPanel to hold text
         text.setLayout(new GridLayout (3,2));
-        text.setBounds(MULTIPLIER*4, MULTIPLIER*8, MULTIPLIER*4, MULTIPLIER*2);
         initializeText();
+        
         
         currentSelected = new int[2][2];
         boardGUI = new JPanel();
@@ -88,12 +93,17 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         renderBoard();
                         System.out.println("RENDER BOARD");
                         
-                        
-                        
+                        if (ai!=null)
+                        {
+                            System.out.println("AI MOVE");
+                            ai.makeMove();
+                            renderBoard();
+                        }
                         
                         currentSelected = new int[2][2]; //revert
                         selected=0;
-
+                        
+                        
                     }
                          
 
@@ -192,9 +202,29 @@ public class CheckersGUI extends javax.swing.JFrame  {
         final JLabel TURN = new JLabel ("TURN");
         turnStatus = new JLabel();
         
-        final JLabel AI = new JLabel ("AI STATUS");
-        aiStatus = new JLabel();
         
+        final JLabel AI = new JLabel ("AI STATUS");
+        aiToggle = new JButton("AI INACTIVE");
+        aiToggle.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e)
+            {
+                aiActive = !aiActive;
+                if (aiActive)
+                {
+                    ai = new AI(board);
+                    aiToggle.setText("AI ACTIVE");
+                    
+                }
+                else
+                {
+                    aiToggle.setText("AI INACTIVE");
+                    ai = null;
+                }
+            }
+            
+            
+        });
         
         
         
@@ -205,7 +235,9 @@ public class CheckersGUI extends javax.swing.JFrame  {
         text.add(TURN);
         text.add(turnStatus);
         text.add(AI);
-        text.add(aiStatus);
+        
+                        System.out.println("ADD TOGGLE BUTTON TO GRIDLAYOUT");
+        text.add(aiToggle);
         
         
     }
@@ -237,7 +269,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         if (board.isWhiteTurn())
             turnStatus.setText("WHITE");
         else
-            turnStatus.setText("BLACK");
+            turnStatus.setText("RED");
         
         
         
