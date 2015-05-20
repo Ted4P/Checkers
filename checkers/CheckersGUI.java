@@ -38,9 +38,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
      */
     public CheckersGUI() {
         board = new Board();
-        //board.debugMode(); //debugging win 
-
-        
         GUIboard = new JLabel[8][8];
         for (int i = 0; i < 8; i++)
         {
@@ -77,7 +74,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
                         //if invalid selection, revert
                         if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
-                            System.out.println("INVALID MOVE");
                             currentSelected = new int[2][2];
                             selected=0;
                         }
@@ -86,36 +82,17 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     {
                         currentSelected[1]=arrayCoord(pressed(e));
                         move(currentSelected);
-                        System.out.println("MOVE");
-                        board.printArr();
-
                         renderBoard();
-                        System.out.println("RENDER BOARD");
 
                         if (ai!=null)
                         {
-                            System.out.println("AI MOVE");
                             ai.makeMove();
                             renderBoard();
                         }
-
-                        
-                        
                         currentSelected = new int[2][2]; //revert
                         selected=0;
 
                     }
-
-                    //debugging
-
-                    for (int[] curr: currentSelected)
-                    {
-                        for (int j: curr)
-                            System.out.print(j+" ");
-                        System.out.println();
-                    }
-                    System.out.println();
-
                 }
 
             });
@@ -123,10 +100,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
             
         panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
         panel.add(boardGUI);
-
-        
-        //this.setLayout(null);
-        //do this last
         renderBoard();
 
     }
@@ -173,19 +146,13 @@ public class CheckersGUI extends javax.swing.JFrame  {
             previousColorIsWhite=!previousColorIsWhite;
         }
 
-        //JPanel panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
-        //panel.add(boardGUI);
 
-        
-        
-        
         refreshText();
         entireGUI.add(panel);
         entireGUI.add(text);
 
         setResizable(false);
         
-        //this.setContentPane(entireGUI);
         pack();
         this.setContentPane(entireGUI);
         setVisible(true);//make it visible
@@ -221,33 +188,25 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
             });
         
-        System.out.println("INITIALIZE TEXT");
         text.add(VICTORY);
         text.add(victoryStatus);
         text.add(TURN);
         text.add(turnStatus);
         text.add(AI);
 
-        System.out.println("ADD TOGGLE BUTTON TO GRIDLAYOUT");
         text.add(aiToggle);
 
     }
     public void refreshText()
     {
-        System.out.println("REFRESHTEXT");
         if (board.gameIsWon()!=null)
         {
-
-            System.out.println("gameIsWon");
-
             if (board.gameIsWon().getIsWhite())  
             {    
-                System.out.println("gameIsWon by white");
                 victoryStatus.setText("WHITE");
             }
             else
             {
-                System.out.println("gameIsWon by black");
                 victoryStatus.setText("BLACK");
             }
         }
@@ -270,9 +229,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
         Component c = boardGUI.findComponentAt(e.getX(), e.getY());
 
         int[] coordinates = new int[2]; //[x,y]
-
-        System.out.println(e.getX() + "," + e.getY()); //debug
-
         coordinates[0] = e.getX();
         coordinates[1] = e.getY();
         return coordinates;
@@ -290,16 +246,12 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private void move(int[][] currentSelected) //moves the pieces in the Board variable
     {
         board.makeMove(currentSelected[0][1],currentSelected[0][0],currentSelected[1][1],currentSelected[1][0]);
-
-        System.out.println(currentSelected[0][0]+","+currentSelected[0][1] + " to " + currentSelected[1][0] + "," + currentSelected[1][1]);
     }
 
     public static void run () //runs the game with debugging console
     {
         CheckersGUI gui = new CheckersGUI();
-        gui.board.printArr();
         gui.renderBoard();
-
     }
 
 }

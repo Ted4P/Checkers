@@ -24,17 +24,4 @@ public class Piece
     public boolean getIsWhite(){
         return isWhite;
     }
-
-    public String toString(){
-        if(isKing){
-            if(isWhite) 
-                return "WW";
-            return "BB";
-        }
-        else{
-            if(isWhite)
-                return "W";
-            return "B";
-        }
-    }
 }
