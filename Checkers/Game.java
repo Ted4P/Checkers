@@ -18,6 +18,7 @@ public class Game
     public static void test(){
         Scanner scan = new Scanner(System.in);
         Board board = new Board();
+        AI ai = new AI(board);
         while(true){
             board.printArr();
             int x = scan.nextInt();
@@ -25,6 +26,7 @@ public class Game
             int newX = scan.nextInt();
             int newY = scan.nextInt();
             board.makeMove(x,y,newX,newY);
+            ai.makeMove();
         }
     }
 }
