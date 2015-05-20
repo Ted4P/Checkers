@@ -18,16 +18,17 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private JLabel[][] GUIboard;
 
     private JPanel entireGUI;
-    private JPanel boardGUI;
+    private JPanel panel;
+        private JPanel boardGUI;
+        
     private JPanel text;
         private JLabel victoryStatus;
         private JLabel turnStatus;
         private JButton aiToggle;
-   
+
     private AI ai; 
     private boolean aiActive;
-    
-    
+
     private boolean selected = false; //if a piece is selected or not
     private int[][] currentSelected; //coordinates of the selected piece and the target area
     private final int MULTIPLIER = 62; //width of one tile
@@ -37,8 +38,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
      */
     public CheckersGUI() {
         board = new Board();
-                                            //board.debugMode(); //debugging win 
-                                         
+        //board.debugMode(); //debugging win 
 
         
         GUIboard = new JLabel[8][8];
@@ -56,12 +56,11 @@ public class CheckersGUI extends javax.swing.JFrame  {
         entireGUI.setLayout(new BoxLayout(entireGUI, BoxLayout.X_AXIS));
         
         aiActive = false; //by default, AI is inactive
-        
+
         text = new JPanel(); //inner JPanel to hold text
         text.setLayout(new GridLayout (3,2));
         initializeText();
-        
-        
+
         currentSelected = new int[2][2];
         boardGUI = new JPanel();
         boardGUI.setLayout(new GridLayout(8,8)); //tiles in a GridLayout of 8x8
@@ -75,7 +74,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     {
                         currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
                         selected++;
-                        
+
                         //if invalid selection, revert
                         if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
                             System.out.println("INVALID MOVE");
@@ -89,23 +88,23 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         move(currentSelected);
                         System.out.println("MOVE");
                         board.printArr();
-                        
+
                         renderBoard();
                         System.out.println("RENDER BOARD");
-                        
+
                         if (ai!=null)
                         {
                             System.out.println("AI MOVE");
                             ai.makeMove();
                             renderBoard();
                         }
+
+                        
                         
                         currentSelected = new int[2][2]; //revert
                         selected=0;
-                        
-                        
+
                     }
-                         
 
                     //debugging
 
@@ -117,20 +116,20 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     }
                     System.out.println();
 
-                    }
+                }
 
             });
-       
-        
-        
+
             
-        this.setLayout(null);
-            //do this last
-        renderBoard();
+        panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
+        panel.add(boardGUI);
+
         
+        //this.setLayout(null);
+        //do this last
+        renderBoard();
 
     }
-
     public void renderBoard() //method to arrange images to form the board
     {
 
@@ -174,22 +173,21 @@ public class CheckersGUI extends javax.swing.JFrame  {
             previousColorIsWhite=!previousColorIsWhite;
         }
 
-        JPanel panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
-        panel.add(boardGUI);
-        
-        
-        refreshText();
-        
-        entireGUI.add(panel);
-        entireGUI.add(text);
-            
-        
-        setResizable(true);
+        //JPanel panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
+        //panel.add(boardGUI);
 
         
         
-        this.setContentPane(entireGUI);
+        
+        refreshText();
+        entireGUI.add(panel);
+        entireGUI.add(text);
+
+        setResizable(false);
+        
+        //this.setContentPane(entireGUI);
         pack();
+        this.setContentPane(entireGUI);
         setVisible(true);//make it visible
     }
 
@@ -197,51 +195,43 @@ public class CheckersGUI extends javax.swing.JFrame  {
     {
         final JLabel VICTORY = new JLabel ("VICTORY");
         victoryStatus = new JLabel();
-        
-        
+
         final JLabel TURN = new JLabel ("TURN");
         turnStatus = new JLabel();
-        
-        
+
         final JLabel AI = new JLabel ("AI STATUS");
         aiToggle = new JButton("AI INACTIVE");
         aiToggle.addActionListener(new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e)
-            {
-                aiActive = !aiActive;
-                if (aiActive)
-                {
-                    ai = new AI(board);
-                    aiToggle.setText("AI ACTIVE");
-                    
-                }
-                else
-                {
-                    aiToggle.setText("AI INACTIVE");
-                    ai = null;
-                }
-            }
-            
-            
-        });
-        
-        
-        
-                        System.out.println("INITIALIZE TEXT");
 
+                public void actionPerformed(ActionEvent e)
+                {
+                    aiActive = !aiActive;
+                    if (aiActive)
+                    {
+                        ai = new AI(board);
+                        aiToggle.setText("AI ACTIVE");
+
+                    }
+                    else
+                    {
+                        aiToggle.setText("AI INACTIVE");
+                        ai = null;
+                    }
+                }
+
+            });
+        
+        System.out.println("INITIALIZE TEXT");
         text.add(VICTORY);
         text.add(victoryStatus);
         text.add(TURN);
         text.add(turnStatus);
         text.add(AI);
-        
-                        System.out.println("ADD TOGGLE BUTTON TO GRIDLAYOUT");
+
+        System.out.println("ADD TOGGLE BUTTON TO GRIDLAYOUT");
         text.add(aiToggle);
-        
-        
+
     }
-    
     public void refreshText()
     {
         System.out.println("REFRESHTEXT");
@@ -249,7 +239,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         {
 
             System.out.println("gameIsWon");
-            
+
             if (board.gameIsWon().getIsWhite())  
             {    
                 System.out.println("gameIsWon by white");
@@ -265,18 +255,14 @@ public class CheckersGUI extends javax.swing.JFrame  {
         {
             victoryStatus.setText("???");
         }
-        
+
         if (board.isWhiteTurn())
             turnStatus.setText("WHITE");
         else
             turnStatus.setText("RED");
-        
-        
-        
+
         
     }
-    
-    
     
     private int[] pressed(MouseEvent e) //method to return pixel coordinates
     {
