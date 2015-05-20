@@ -59,5 +59,5 @@ public class AI{
 			arr[sPos] = temp;
 		}
 	}
-	}
+	
 }
