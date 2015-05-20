@@ -4,8 +4,7 @@
  * and open the template in the editor.
  */
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -18,12 +17,18 @@ public class CheckersGUI extends javax.swing.JFrame  {
     public Board board; 
     private JLabel[][] GUIboard;
 
+    private JPanel entireGUI;
     private JPanel boardGUI;
-
+    private JPanel text;
+        private JLabel victoryStatus;
+        private JLabel turnStatus;
+        private JLabel aiStatus;
+   
+    
+    
+    
     private boolean selected = false; //if a piece is selected or not
-
     private int[][] currentSelected; //coordinates of the selected piece and the target area
-
     private final int MULTIPLIER = 62; //width of one tile
 
     /**
@@ -44,6 +49,14 @@ public class CheckersGUI extends javax.swing.JFrame  {
             }
         }
 
+        entireGUI = new JPanel(); //outer JPanel to store the boardGUI and the textual information
+        entireGUI.setLayout(new BoxLayout(entireGUI, BoxLayout.X_AXIS));
+        
+        text = new JPanel(); //inner JPanel to hold text
+        text.setLayout(new GridLayout (3,2));
+        text.setBounds(MULTIPLIER*4, MULTIPLIER*8, MULTIPLIER*4, MULTIPLIER*2);
+        initializeText();
+        
         currentSelected = new int[2][2];
         boardGUI = new JPanel();
         boardGUI.setLayout(new GridLayout(8,8)); //tiles in a GridLayout of 8x8
@@ -75,30 +88,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         renderBoard();
                         System.out.println("RENDER BOARD");
                         
-                        if (board.gameIsWon()!=null)
-                        {
-                            
-                            
-                            
-                            System.out.println("gameIsWon");
-                            
-                            JLabel banner = new JLabel();
-                            if (board.gameIsWon().getIsWhite())  
-                            {    
-                                System.out.println("gameIsWon by white");
-                                banner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitevictory.png")));
-                            }
-                            else
-                            {
-                                System.out.println("gameIsWon by black");
-                                banner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/blackvictory.png")));
-                            }
-                            
-                            getContentPane().add(banner);
-                            
-                            this.pack();
-                                
-                        }
+                        
                         
                         
                         currentSelected = new int[2][2]; //revert
@@ -120,8 +110,14 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     }
 
             });
-        //do this last
+       
+        
+        
+            
+        this.setLayout(null);
+            //do this last
         renderBoard();
+        
 
     }
 
@@ -170,18 +166,86 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         JPanel panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
         panel.add(boardGUI);
-        panel.setLocation(42,42);
-
-        getContentPane().add(panel); //add panel to window
-        this.setResizable(false);
+        
+        
+        refreshText();
+        
+        entireGUI.add(panel);
+        entireGUI.add(text);
+            
+        
+        setResizable(true);
 
         
-        this.setVisible(true);//make it visible
-        this.setContentPane(panel);
-        this.pack();
-
+        
+        this.setContentPane(entireGUI);
+        pack();
+        setVisible(true);//make it visible
     }
 
+    private void initializeText()
+    {
+        final JLabel VICTORY = new JLabel ("VICTORY");
+        victoryStatus = new JLabel();
+        
+        
+        final JLabel TURN = new JLabel ("TURN");
+        turnStatus = new JLabel();
+        
+        final JLabel AI = new JLabel ("AI STATUS");
+        aiStatus = new JLabel();
+        
+        
+        
+        
+                        System.out.println("INITIALIZE TEXT");
+
+        text.add(VICTORY);
+        text.add(victoryStatus);
+        text.add(TURN);
+        text.add(turnStatus);
+        text.add(AI);
+        text.add(aiStatus);
+        
+        
+    }
+    
+    public void refreshText()
+    {
+        System.out.println("REFRESHTEXT");
+        if (board.gameIsWon()!=null)
+        {
+
+            System.out.println("gameIsWon");
+            
+            if (board.gameIsWon().getIsWhite())  
+            {    
+                System.out.println("gameIsWon by white");
+                victoryStatus.setText("WHITE");
+            }
+            else
+            {
+                System.out.println("gameIsWon by black");
+                victoryStatus.setText("BLACK");
+            }
+        }
+        else
+        {
+            victoryStatus.setText("???");
+        }
+        
+        if (board.isWhiteTurn())
+            turnStatus.setText("WHITE");
+        else
+            turnStatus.setText("BLACK");
+        
+        
+        
+        
+    }
+    
+    
+    
     private int[] pressed(MouseEvent e) //method to return pixel coordinates
     {
 
