@@ -18,14 +18,6 @@ public class Board
         addPieces(); 
     }
 
-    public void debugMode(){
-        board = new Piece[8][8];
-        board[0][0] = new Piece(true); 
-        board[1][1] = new Piece(false);
-        blackLeft=1;
-        whiteLeft=1;
-    }
-
     private void addPieces(){
         for(int i = 0; i < 3; i++)  //Correct white rows
             for(int j = i%2; j < board[0].length; j += 2){
@@ -46,7 +38,6 @@ public class Board
     }
 
     public boolean isEmpty(int xpos, int ypos){ //return if a selection is empty
-        System.out.println("IN ISEMPTY");
         return board[xpos][ypos]==null;
     }
 
@@ -131,13 +122,11 @@ public class Board
      */
     public void printArr(){
         for(int i = 0; i < board.length; i++){
-
             for(int j = 0; j < board[0].length; j++){
                 if(board[i][j]==null) 
                     System.out.print("| ");
                 else
                     System.out.print("|" + board[i][j]);
-
             }
             System.out.println("|");
         }
