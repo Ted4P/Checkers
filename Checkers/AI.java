@@ -9,7 +9,7 @@ public class AI{
         //First attempt a capture move
 		//Create a random list of rows and cols to try
 		int[] rows = {0,1,2,3,4,5,6,7};
-		int[] cols = rows;
+		int[] cols = {0,1,2,3,4,5,6,7}
 		scrambleArr(rows);
 		scrambleArr(cols);
         
