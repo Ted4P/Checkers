@@ -27,8 +27,8 @@ public class AI{
 		for(int x: rows){
             for(int y: cols){
                 if(board.isValidSelection(x,y)){	
-					newX[0] = x + 1; newX[1] = x - 1;
-                    newY[0] = y + 1; newY[1] = y - 1;
+					int[] newX = {x+2, x-2};
+                    int[] newY = {y+2, y-2};
                     for(int tryX: newX)
                         for(int tryY: newY)
                             if(validTarget(tryX, tryY) && board.makeMove(x,x,tryX,tryY)) return true;
