@@ -5,7 +5,7 @@ public class AI{
     }
 
     public boolean makeMove(){
-        if(board.isWhiteTurn()) {System.out.println("NOT AI TURN"); return false; }
+        if(board.isWhiteTurn()) return false; 
         //First attempt a capture move
 		//Create a random list of rows and cols to try
 		int[] rows = {0,1,2,3,4,5,6,7};
@@ -24,7 +24,6 @@ public class AI{
                 }
             }
         }
-		System.out.println("NOT MAKING A CAPTURE");
 		for(int x: rows){
             for(int y: cols){
                 if(board.isValidSelection(x,y)){
@@ -33,11 +32,10 @@ public class AI{
                     int[] newY = {y+2, y-2};
                     for(int tryX: newX)
                         for(int tryY: newY)
-                            if(validTarget(tryX, tryY)){System.out.println("VALID TARGET");  if(board.makeMove(x,x,tryX,tryY)) return true;}
+                            if(validTarget(tryX, tryY) && board.makeMove(x,y,tryX,tryY)) return true;
 				}
 			}
 		}
-		System.out.println("RETURNING FALSE");
 		return false;
     }
 
