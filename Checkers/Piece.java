@@ -1,6 +1,6 @@
 
 /**
- * Defines a Piece object, minimal information stored
+ * Defines a Piece object, (only stores colour and King status)
  * 
  * @author (your name) 
  * @version (a version number or a date)
