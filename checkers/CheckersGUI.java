@@ -1,5 +1,4 @@
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,16 +14,16 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     //JPanel entireGUI for the enclosure of both the board and the text
     private JPanel entireGUI;
-    
+
     //outer JPanel panel for the outer board panel, boardGUI for the inner board panel
     private JPanel panel;
-        private JPanel boardGUI;
-        
+    private JPanel boardGUI;
+
     //JPanel for textual info; JLabels/JButton for information and toggling
     private JPanel text;
-        private JLabel victoryStatus;
-        private JLabel turnStatus;
-        private JButton aiToggle;
+    private JLabel victoryStatus;
+    private JLabel turnStatus;
+    private JButton aiToggle;
 
     //AI implementation
     private AI ai; 
@@ -52,7 +51,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         entireGUI = new JPanel(); //outer JPanel to store the boardGUI and the textual information
         entireGUI.setLayout(new BoxLayout(entireGUI, BoxLayout.X_AXIS));
-        
+
         aiActive = false; //by default, AI is inactive
 
         text = new JPanel(); //inner JPanel to hold text
@@ -72,41 +71,53 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     {
                         currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
                         selected++;
-
+                        System.out.println("FIRST SELECTION");
                         //if invalid selection, revert
                         if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
                             currentSelected = new int[2][2];
                             selected=0;
+                            System.out.println("INVALID FIRST SELECTION");
                         }
                     }
                     else if (selected ==1) //target tile
                     {
                         //using the coordinates, make a move and render the board on the GUI
+                        System.out.println(currentSelected[0][1] + " " + currentSelected[0][0] + " " + currentSelected[1][1] + " " + currentSelected[1][0]);
                         currentSelected[1]=arrayCoord(pressed(e));
-                        move(currentSelected);
-                        renderBoard();
-
-                        if (ai!=null) //make AI move if AI is active
-                        {
-                            ai.makeMove();
+                        TurnProcessor turnProc = new TurnProcessor(currentSelected[0][1], currentSelected[0][0], currentSelected[1][1], currentSelected[1][0], board);
+                        if(currentSelected[1][1]==currentSelected[0][1] && currentSelected[0][0] == currentSelected[1][0]){
+                            currentSelected = new int[2][2];
+                            selected=0;
+                            System.out.println("DESELECTING");
+                        }
+                        else if(!turnProc.isValidTurn()){
+                            selected = 1;
+                            System.out.println("INVALID SELECTION");
+                        } else{
+                            move(currentSelected);
                             renderBoard();
+                            //revert to original state
+                            currentSelected = new int[2][2];
+                            selected=0;
+                            System.out.println("MAKE VALID MOVE");
                         }
                         
-                        //revert to original state
-                        currentSelected = new int[2][2];
-                        selected=0;
-
                     }
+                    if (ai!=null) //make AI move if AI is active
+                            {
+                                ai.makeMove();
+                                renderBoard();
+                            }
                 }
 
             });
 
-            
         panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
         panel.add(boardGUI);
         renderBoard(); //render board on the GUI
 
     }
+
     public void renderBoard() //method to arrange images to form the board
     {
 
@@ -150,15 +161,13 @@ public class CheckersGUI extends javax.swing.JFrame  {
             previousColorIsWhite=!previousColorIsWhite;
         }
 
-
         refreshText(); //update the text fields
-        
         //combine the two components of the GUI
         entireGUI.add(panel);
         entireGUI.add(text);
 
         setResizable(false); //window cannot be resized
-        
+
         //make it visible
         pack();
         this.setContentPane(entireGUI);
@@ -194,7 +203,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                 }
 
             });
-        
+
         text.add(VICTORY);
         text.add(victoryStatus);
         text.add(TURN);
@@ -203,6 +212,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         text.add(aiToggle);
 
     }
+
     public void refreshText()
     {
         if (board.gameIsWon()!=null) //set victor if there is one
@@ -226,9 +236,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         else
             turnStatus.setText("RED");
 
-        
     }
-    
     private int[] pressed(MouseEvent e) //returns pixel coordinates where clicked
     {
 
