@@ -1,6 +1,6 @@
 
 /**
- * Write a description of class Piece here.
+ * Defines a Piece object, minimal information stored
  * 
  * @author (your name) 
  * @version (a version number or a date)
@@ -23,18 +23,5 @@ public class Piece
     
     public boolean getIsWhite(){
         return isWhite;
-    }
-
-    public String toString(){
-        if(isKing){
-            if(isWhite) 
-                return "WW";
-            return "BB";
-        }
-        else{
-            if(isWhite)
-                return "W";
-            return "B";
-        }
     }
 }
