@@ -86,7 +86,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                                 if (board.getPiece(i,j).getIsKing())
                                     GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhitekingselected.png")));
                                 else 
-                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteselected.png")));
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhite.png")));
 
                             }
                             else //so that means it's a red
@@ -107,6 +107,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         if(currentSelected[1][1]==currentSelected[0][1] && currentSelected[0][0] == currentSelected[1][0]){
                             currentSelected = new int[2][2];
                             selected=0;
+                            renderBoard();
                             System.out.println("DESELECTING");
                         }
                         else if(!turnProc.isValidTurn()){
@@ -127,6 +128,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         ai.makeMove();
                         renderBoard();
                     }
+                    
                 }
 
             });
