@@ -1,9 +1,7 @@
 
 /**
  * Defines a Piece object, (only stores colour and King status)
- * 
- * @author (your name) 
- * @version (a version number or a date)
+
  */
 public class Piece
 {

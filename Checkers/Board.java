@@ -83,7 +83,7 @@ public class Board
     }
 
     private boolean doubleMove(int xpos, int ypos){                             //Return true if another capture is possible
-        int[] newXP = {xpos + 2, xpos - 2};
+        int[] newXP = {xpos + 2, xpos - 2}; //Generate possible future moves
         int[] newYP = {ypos + 2, ypos - 2};
         for(int x: newXP)
             for(int y: newYP)
@@ -117,10 +117,10 @@ public class Board
         return null;
     }
 
-    private boolean anyValidMove(){
+    private boolean anyValidMove(){     //Find if a player has any possible moves left
         for(int xpos = 0; xpos < 8; xpos++){
             for(int ypos = 0; ypos < 8; ypos++){
-                int[] newXP = {xpos + 2, xpos - 2, xpos + 1, xpos - 1};
+                int[] newXP = {xpos + 2, xpos - 2, xpos + 1, xpos - 1};     //Generate all possible move choices
                 int[] newYP = {ypos + 2, ypos - 2, ypos + 1, ypos - 1};
                 for(int x: newXP)
                     for(int y: newYP)

@@ -76,6 +76,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             selected=0;
                         }
                         else {
+                            //If a valid selection has been made, highlight the piece to the user
                             int i = currentSelected[0][1]; 
                             int j = currentSelected[0][0];
                             if (board.getPiece(i,j).getIsWhite())//if the piece is white
@@ -95,19 +96,19 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             }  
                         }
                     }
-                    else if (selected ==1) //target tile
+                    else if (selected ==1) //Target tile
                     {
                         //using the coordinates, make a move and render the board on the GUI
                         currentSelected[1]=arrayCoord(pressed(e));
                         TurnProcessor turnProc = new TurnProcessor(currentSelected[0][1], currentSelected[0][0], currentSelected[1][1], currentSelected[1][0], board);
-                        if(currentSelected[1][1]==currentSelected[0][1] && currentSelected[0][0] == currentSelected[1][0]){
+                        if(currentSelected[1][1]==currentSelected[0][1] && currentSelected[0][0] == currentSelected[1][0]){ //If the player clicked on their first selection, deselect it
                             currentSelected = new int[2][2];
                             selected=0;
                             renderBoard();
                         }
-                        else if(!turnProc.isValidTurn()){
+                        else if(!turnProc.isValidTurn()){   //If the selection is invalid, wait for a valid one
                             selected = 1;
-                        } else{
+                        } else{         //If a valid selection, do the move
                             move(currentSelected);
                             renderBoard();
                             //revert to original state
@@ -138,7 +139,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         {
             for (int j = 0; j < 8; j++)
             {
-                if (board.getPiece(i,j) != null)
+                if (board.getPiece(i,j) != null)    //Get the piece at that space in the board
                 {
                     if (board.getPiece(i,j).getIsWhite())//if the piece is white
                     {
@@ -187,7 +188,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     private void initializeText()
     {
-        final JLabel VICTORY = new JLabel ("VICTORY");
+        final JLabel VICTORY = new JLabel ("VICTORY");  //Indicators to show vistory, Turn status and AI
         victoryStatus = new JLabel();
 
         final JLabel TURN = new JLabel ("TURN");
@@ -234,7 +235,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
             }
             else
             {
-                victoryStatus.setText("BLACK");
+                victoryStatus.setText("RED");
             }
         }
         else
@@ -264,7 +265,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
     {
 
         for (int i=0; i<2; i++)
-            pixelCoord[i] /= MULTIPLIER;
+            pixelCoord[i] /= MULTIPLIER;        //Divide the pixel by the width of each piece
 
         return pixelCoord;
     }
@@ -274,7 +275,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         board.makeMove(currentSelected[0][1],currentSelected[0][0],currentSelected[1][1],currentSelected[1][0]);
     }
 
-    public static void main (String[] args) //runs the game with debugging console
+    public static void main (String[] args) //Run the game!
     {
         CheckersGUI gui = new CheckersGUI();
         gui.renderBoard();

@@ -18,7 +18,7 @@ public class AI{
         for(int x: rows){                   //Find possible captures
             for(int y: cols){
                 if(board.isValidSelection(x,y)){
-                    int[] newX = {x+2, x-2};
+                    int[] newX = {x+2, x-2};        //Generate possible moves
                     int[] newY = {y+2, y-2};
                     for(int tryX: newX)
                         for(int tryY: newY)
@@ -29,11 +29,11 @@ public class AI{
         for(int x: rows){                   //If no capture is found, look for normal moves
             for(int y: cols){
                 if(board.isValidSelection(x,y)){
-                    int[] newX = {x+1, x-1};
+                    int[] newX = {x+1, x-1};        //Generate possible moves
                     int[] newY = {y+1, y-1};
                     for(int tryX: newX)
                         for(int tryY: newY)
-                            if(validTarget(tryX, tryY) && board.makeMove(x,y,tryX,tryY)) return true;
+                            if(validTarget(tryX, tryY) && board.makeMove(x,y,tryX,tryY)) return true;   //If a move works, return true
                 }
             }
         }
@@ -44,7 +44,7 @@ public class AI{
         if(board.makeMove(x,y,capX,capY)){   //If a possible capture (with double moves) is possible, perform that capture
             if(board.isWhiteTurn()) return true;    //If a double move is not possible, exit
             else {
-                int[] newX = {x+2, x-2};
+                int[] newX = {x+2, x-2};        //Generate possible moves
                 int[] newY = {y+2, y-2};
                 for(int tryX: newX)
                     for(int tryY: newY)
