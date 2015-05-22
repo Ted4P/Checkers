@@ -71,12 +71,10 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     {
                         currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
                         selected++;
-                        System.out.println("FIRST SELECTION");
                         //if invalid selection, revert
                         if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
                             currentSelected = new int[2][2];
                             selected=0;
-                            System.out.println("INVALID FIRST SELECTION");
                         }
                         else {
                             int i = currentSelected[0][1]; 
@@ -101,27 +99,22 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     else if (selected ==1) //target tile
                     {
                         //using the coordinates, make a move and render the board on the GUI
-                        System.out.println(currentSelected[0][1] + " " + currentSelected[0][0] + " " + currentSelected[1][1] + " " + currentSelected[1][0]);
                         currentSelected[1]=arrayCoord(pressed(e));
                         TurnProcessor turnProc = new TurnProcessor(currentSelected[0][1], currentSelected[0][0], currentSelected[1][1], currentSelected[1][0], board);
                         if(currentSelected[1][1]==currentSelected[0][1] && currentSelected[0][0] == currentSelected[1][0]){
                             currentSelected = new int[2][2];
                             selected=0;
                             renderBoard();
-                            System.out.println("DESELECTING");
                         }
                         else if(!turnProc.isValidTurn()){
                             selected = 1;
-                            System.out.println("INVALID SELECTION");
                         } else{
                             move(currentSelected);
                             renderBoard();
                             //revert to original state
                             currentSelected = new int[2][2];
                             selected=0;
-                            System.out.println("MAKE VALID MOVE");
                         }
-
                     }
                     if (ai!=null) //make AI move if AI is active
                     {

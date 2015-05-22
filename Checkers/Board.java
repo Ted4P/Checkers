@@ -125,7 +125,7 @@ public class Board
                     for(int y: newYP)
                         if(x > -1 && y > -1 && x < 8 && y < 8 && isEmpty(x,y) && !isEmpty(xpos,ypos)){   //Make sure the x and y are valid indices
                             TurnProcessor turnProc = new TurnProcessor(xpos, ypos, x, y, this);         //Check if the move is valid
-                            if(turnProc.isValidTurn()) return true;
+                            if(getPiece(xpos,ypos).getIsWhite() == whiteTurn && turnProc.isValidTurn()) return true;
                         }
             }
         }
