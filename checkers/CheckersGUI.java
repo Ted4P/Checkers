@@ -277,7 +277,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         board.makeMove(currentSelected[0][1],currentSelected[0][0],currentSelected[1][1],currentSelected[1][0]);
     }
 
-    public static void run () //runs the game with debugging console
+    public static void main (String[] args) //runs the game with debugging console
     {
         CheckersGUI gui = new CheckersGUI();
         gui.renderBoard();
