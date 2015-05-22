@@ -111,8 +111,9 @@ public class Board
     }
 
     public Piece gameIsWon(){                                            //If white has won, return a white piece, if black has won, return black, else return null
-        if((!anyValidMove() && !whiteTurn) || blackLeft==0) return new Piece(true);
-        if((!anyValidMove() && whiteTurn) || whiteLeft==0) return new Piece(false);
+        boolean validMove = anyValidMove();
+        if((!validMove && !whiteTurn) || blackLeft==0) return new Piece(true);
+        if((!validMove && whiteTurn) || whiteLeft==0) return new Piece(false);
         return null;
     }
 
