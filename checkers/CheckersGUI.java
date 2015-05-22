@@ -84,7 +84,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             if (board.getPiece(i,j).getIsWhite())//if the piece is white
                             {
                                 if (board.getPiece(i,j).getIsKing())
-                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhitekingselected.png")));
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteking.png")));
                                 else 
                                     GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhite.png")));
 
@@ -92,9 +92,9 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             else //so that means it's a red
                             {
                                 if (board.getPiece(i,j).getIsKing())
-                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredkingselected.png")));
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredking.png")));
                                 else 
-                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredselected.png")));
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithred.png")));
                             }  
                         }
                     }

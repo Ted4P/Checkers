@@ -77,7 +77,6 @@ public class Board
         return false;
     }
 
-
     private void doMove(int xpos, int ypos, int newXPos, int newYPos){          //No checks whatsoever, just move the piece
         board[newXPos][newYPos] = board[xpos][ypos];
         board[xpos][ypos] = null;
@@ -112,9 +111,24 @@ public class Board
     }
 
     public Piece gameIsWon(){                                            //If white has won, return a white piece, if black has won, return black, else return null
-        if(blackLeft!=0 && whiteLeft!=0) return  null;
-        if(blackLeft==0) return new Piece(true);
-        return new Piece(false);
+        if((!anyValidMove() && !whiteTurn) || blackLeft==0) return new Piece(true);
+        if((!anyValidMove() && whiteTurn) || whiteLeft==0) return new Piece(false);
+        return null;
     }
 
+    private boolean anyValidMove(){
+        for(int xpos = 0; xpos < 8; xpos++){
+            for(int ypos = 0; ypos < 8; ypos++){
+                int[] newXP = {xpos + 2, xpos - 2, xpos + 1, xpos - 1};
+                int[] newYP = {ypos + 2, ypos - 2, ypos + 1, ypos - 1};
+                for(int x: newXP)
+                    for(int y: newYP)
+                        if(x > -1 && y > -1 && x < 8 && y < 8 && isEmpty(x,y) && !isEmpty(xpos,ypos)){   //Make sure the x and y are valid indices
+                            TurnProcessor turnProc = new TurnProcessor(xpos, ypos, x, y, this);         //Check if the move is valid
+                            if(turnProc.isValidTurn()) return true;
+                        }
+            }
+        }
+        return false;
+    }
 }
