@@ -78,6 +78,25 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             selected=0;
                             System.out.println("INVALID FIRST SELECTION");
                         }
+                        else {
+                            int i = currentSelected[0][1]; 
+                            int j = currentSelected[0][0];
+                            if (board.getPiece(i,j).getIsWhite())//if the piece is white
+                            {
+                                if (board.getPiece(i,j).getIsKing())
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhitekingselected.png")));
+                                else 
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteselected.png")));
+
+                            }
+                            else //so that means it's a red
+                            {
+                                if (board.getPiece(i,j).getIsKing())
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredkingselected.png")));
+                                else 
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredselected.png")));
+                            }  
+                        }
                     }
                     else if (selected ==1) //target tile
                     {
@@ -101,13 +120,13 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             selected=0;
                             System.out.println("MAKE VALID MOVE");
                         }
-                        
+
                     }
                     if (ai!=null) //make AI move if AI is active
-                            {
-                                ai.makeMove();
-                                renderBoard();
-                            }
+                    {
+                        ai.makeMove();
+                        renderBoard();
+                    }
                 }
 
             });
@@ -237,6 +256,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
             turnStatus.setText("RED");
 
     }
+
     private int[] pressed(MouseEvent e) //returns pixel coordinates where clicked
     {
 
