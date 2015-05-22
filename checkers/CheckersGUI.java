@@ -120,7 +120,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             renderBoard();
                         }
                     }
-                    
+
                 }
             });
         panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
