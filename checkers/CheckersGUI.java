@@ -66,7 +66,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
                 int selected =0;
 
                 public void mouseClicked(MouseEvent e) {
-
                     if (selected==0) //if nothing is selected
                     {
                         currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
@@ -115,17 +114,15 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             currentSelected = new int[2][2];
                             selected=0;
                         }
-                    }
-                    if (ai!=null) //make AI move if AI is active
-                    {
-                        ai.makeMove();
-                        renderBoard();
+                        if (ai!=null) //make AI move if AI is active
+                        {
+                            ai.makeMove();
+                            renderBoard();
+                        }
                     }
                     
                 }
-
             });
-
         panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
         panel.add(boardGUI);
         renderBoard(); //render board on the GUI
