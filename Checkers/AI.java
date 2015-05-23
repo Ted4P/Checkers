@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Hyun Choi, Ted Pyne, Patrick Forelli
+ */
 public class AI{
     private Board board;
     public AI(Board board){     //Store a board to make moves on

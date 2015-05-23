@@ -2,7 +2,6 @@
 /**
  * 
  * @author Ted Pyne, Hyun Choi, Patrick Forelli 
- * @version (a version number or a date)
  */
 public class Board
 {

@@ -1,8 +1,9 @@
 
 /**
  * Defines a Piece object, (only stores colour and King status)
-
+ * @author Hyun Choi, Ted Pyne, Patrick Forelli
  */
+
 public class Piece
 {
     private boolean isWhite, isKing;

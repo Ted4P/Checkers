@@ -1,9 +1,6 @@
-
 /**
- * Processes turns
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ *
+ * @author Hyun Choi, Ted Pyne, Patrick Forelli
  */
 public class TurnProcessor
 {
