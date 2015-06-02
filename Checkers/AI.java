@@ -8,6 +8,7 @@ public class AI{
     private Board board;
     private boolean isWhite, madeCapture;
     private ArrayList<Move> posMoves;
+    private final int BASE_RECUR = 7;
     public AI(Board board, boolean isWhite){     //Store a board to make moves on
         this.board = board;
         this.isWhite = isWhite;
@@ -69,7 +70,7 @@ public class AI{
     }
 
     public boolean makeMove(){
-        return makeMove(2);
+        return makeMove(BASE_RECUR);
     }
 
     private boolean calcCapture(int x, int y, int capX, int capY){
