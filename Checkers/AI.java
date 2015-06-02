@@ -8,7 +8,7 @@ public class AI{
     private Board board;
     private boolean isWhite, madeCapture;
     private ArrayList<Move> posMoves;
-    private final int BASE_RECUR = 7;
+    private final int BASE_RECUR = 4;
     public AI(Board board, boolean isWhite){     //Store a board to make moves on
         this.board = board;
         this.isWhite = isWhite;
@@ -18,10 +18,9 @@ public class AI{
         this(board, false);
     }
 
-    public boolean makeMove(int recurLeft){
+    int makeMove(int recurLeft){
         System.out.println("How many recusions " + recurLeft);
-        madeCapture = false;
-        if(board.isWhiteTurn()!=isWhite) return false;        
+        if(board.isWhiteTurn()!=isWhite) return -1;        
         //First attempt a capture move
         posMoves = new ArrayList<Move>();
 
@@ -32,7 +31,13 @@ public class AI{
                     int[] newY = {y+2, y-2};
                     for(int tryX: newX)
                         for(int tryY: newY)
-                            if(validTarget(tryX, tryY) && calcCapture(x,y,tryX,tryY)){System.out.println("VALID CAP"); return true; }     //Use submethod to check for valid capture
+                            if(validTarget(tryX, tryY) && calcCapture(x,y,tryX,tryY)){
+                                if(recurLeft==0) {
+                                        board.makeMove(x,y,tryX,tryY); 
+                                        return 10;
+                                    }
+                                    else posMoves.add(new Move(x,y,tryX,tryY));
+                            }     //Use submethod to check for valid capture
                 }
             }
         }   
@@ -46,44 +51,52 @@ public class AI{
                             if(validTarget(tryX, tryY)){
                                 Board newMove = new Board(board);
                                 if(newMove.makeMove(x,y,tryX,tryY)){ 
-                                    if(recurLeft==0) {System.out.println("TAIL REACHED"); board.makeMove(x,y,tryX,tryY); return true;}
+                                    if(recurLeft==0) {
+                                        board.makeMove(x,y,tryX,tryY); 
+                                        return 0;
+                                    }
                                     else posMoves.add(new Move(x,y,tryX,tryY));
                                 }
                             }
                 }
             }
         }
-        if(posMoves.size()==0) return false;   //If no move can be found, return false
-        
+        if(posMoves.size()==0) return -1;   //If no move can be found, return false
+
+        Move bestMove = posMoves.get(0);
+        int bestVal = 0;
+        int thisVal = 0;
         for(int i = 0; i < posMoves.size(); i++){
+            thisVal = 0;
+            
             Board test = new Board(board);
             test.makeMove(posMoves.get(i).getX(), posMoves.get(i).getY(), posMoves.get(i).getNewX(), posMoves.get(i).getNewY());
             AI tester = new AI(test, !isWhite);
-            tester.makeMove(recurLeft-1);
-            if(!tester.captureMade()){
-                board.makeMove(posMoves.get(i).getX(), posMoves.get(i).getY(), posMoves.get(i).getNewX(), posMoves.get(i).getNewY());
-                return true;
+            TurnProcessor turnProc = new TurnProcessor(posMoves.get(i).getX(), posMoves.get(i).getY(), posMoves.get(i).getNewX(), posMoves.get(i).getNewY(), board);
+            
+            if(turnProc.wasMoveCapture()) 
+                thisVal =20;
+            
+            int tryVal = tester.makeMove(recurLeft-1);
+            System.out.println("TRYVAL: " + tryVal);
+            if(i==0 || tryVal < bestVal){
+               bestVal = tryVal;
+               bestMove = posMoves.get(i);
             }
         }
-        board.makeMove(posMoves.get(0).getX(), posMoves.get(0).getY(), posMoves.get(0).getNewX(), posMoves.get(0).getNewY());
-       return true;
+        System.out.println("BEST: " + bestVal);
+        board.makeMove(bestMove.getX(), bestMove.getY(), bestMove.getNewX(), bestMove.getNewY());
+        return thisVal;
     }
 
     public boolean makeMove(){
-        return makeMove(BASE_RECUR);
+        return makeMove(BASE_RECUR) != -1;
     }
 
     private boolean calcCapture(int x, int y, int capX, int capY){
-        if(board.makeMove(x,y,capX,capY)){   //If a possible capture (with double moves) is possible, perform that capture
-            madeCapture = true;
-            if(board.isWhiteTurn()!=isWhite) return true;    //If a double move is not possible, exit
-            else {
-                int[] newX = {x+2, x-2};        //Generate possible moves
-                int[] newY = {y+2, y-2};
-                for(int tryX: newX)
-                    for(int tryY: newY)
-                        if(validTarget(tryX, tryY) && calcCapture(x,y,tryX,tryY)) return true;  //If a double move is possible, try all follow up moves recursively
-            }
+        Board newMove = new Board(board);
+        if(newMove.makeMove(x,y,capX,capY)){   //If a possible capture (with double moves) is possible, perform that capture
+            return true;
         }
         return false;
     }
@@ -91,9 +104,4 @@ public class AI{
     private boolean validTarget(int x, int y){      //Bounds checking for move and capture targets
         return x > -1 && x < 8 && y > -1 && y < 8;
     }
-
-    public boolean captureMade(){
-        return madeCapture;
-    }
-
 }
