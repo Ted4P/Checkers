@@ -117,7 +117,9 @@ public class CheckersGUI extends javax.swing.JFrame  {
                         }
                         if (ai!=null) //make AI move if AI is active
                         {
-                            ai.makeMove();
+                            while(!board.isWhiteTurn())
+                                ai.makeMove();
+                            
                             renderBoard();
                         }
                     }

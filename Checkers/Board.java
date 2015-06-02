@@ -16,6 +16,13 @@ public class Board
         whiteTurn = true;   //Start with white
         addPieces(); 
     }
+    
+    public Board(Board base){
+        board = new Piece[8][8];
+        whiteTurn = base.isWhiteTurn();
+        copyPieces(base);
+        
+    }
 
     private void addPieces(){
         for(int i = 0; i < 3; i++)  //Correct white rows
@@ -28,6 +35,14 @@ public class Board
             for(int j = i%2; j < board[0].length; j += 2){
                 board[i][j] = new Piece(false);                          //Initialise black pieces
                 blackLeft++;
+        }
+    }
+    
+    private void copyPieces(Board other){         //Produces an exact copy of a "aprent" board
+        for(int i = 0; i < board.length; i++){
+            for(int j = 0; j < board[0].length; j++){
+                board[i][j] = other.getPiece(i,j);
+            }
         }
     }
 
@@ -94,8 +109,8 @@ public class Board
     }
 
     private void kingPromoter(int xpos, int ypos){  //If a piece has reached the opposite side, promote it to a king
-        if(board[xpos][ypos].getIsWhite() && xpos == board.length -1) board[xpos][ypos].makeKing();
-        else if(!board[xpos][ypos].getIsWhite() && xpos == 0) board[xpos][ypos].makeKing();
+        if(board[xpos][ypos].getIsWhite() && xpos == board.length -1) board[xpos][ypos] = new Piece(true, true);
+        else if(!board[xpos][ypos].getIsWhite() && xpos == 0) board[xpos][ypos] = new Piece(false, true);
     }
 
     private void nextPlayer(){
