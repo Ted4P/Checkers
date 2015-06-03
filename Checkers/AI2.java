@@ -4,8 +4,8 @@ import java.util.ArrayList;
 public class AI2 extends MoveAI{
 
 	private static final int BASE_RECUR = 4;
-	private static double aggression;
-	
+	private static double aggression;		//Higher values result in a more defensive AI
+
 	public AI2(Board board, boolean isWhite) {
 		super(board, isWhite);
 		aggression = 1.5;
@@ -14,7 +14,7 @@ public class AI2 extends MoveAI{
 	public AI2(Board board){
 		this(board,false);
 	}
-	
+
 	public boolean makeMove() {
 		return makeMove(BASE_RECUR);
 	}
@@ -26,7 +26,7 @@ public class AI2 extends MoveAI{
 		if(recurLeft==0)			//If the base level of recursion has been reached
 			return board.makeMove(findPosMoves().get(0));
 
-		
+
 		int bestMoveScore =100;
 		Move bestMove = moves.get(0);
 		for(Move move: moves){
@@ -36,7 +36,7 @@ public class AI2 extends MoveAI{
 			AI2 ai = new AI2(testBoard, !isWhite);
 			int moveScore = 0;
 			while(ai.makeMove(recurLeft-1));		//Go though all AI moves (work with double moves)
-			moveScore += ai.getGameScore();
+				moveScore += ai.getGameScore();
 			if(moveScore<bestMoveScore){ 
 				bestMoveScore=moveScore;
 				bestMove = move;
