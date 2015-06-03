@@ -8,7 +8,7 @@ public class AI2 extends MoveAI{
 
     public AI2(Board board, boolean isWhite) {
         super(board, isWhite);
-        aggression = 2;
+        aggression = 1.5;
     }
 
     public AI2(Board board){
@@ -38,7 +38,6 @@ public class AI2 extends MoveAI{
             AI2 ai = new AI2(testBoard, !isWhite);
             double moveScore = 0;
             while(ai.makeMove(recurLeft-1));        //Go though all AI moves (work with double moves)
-                moveScore += ai.getGameScore();
             if(moveScore<bestMoveScore){ 
                 bestMoveScore=moveScore;
                 bestMove = move;
@@ -50,7 +49,7 @@ public class AI2 extends MoveAI{
     public double getGameScore(){
         int blackScore=0, whiteScore=0;
         for(int x = 0; x < 8; x++)
-            for(int y    = 0; y < 8; y++){
+            for(int y = 0; y < 8; y++){
                 Piece piece = board.getPiece(x,y);
                 if(piece!=null && piece.getIsWhite()){
                     if(piece.getIsKing()) whiteScore++;
