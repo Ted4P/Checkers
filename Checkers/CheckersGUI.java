@@ -57,7 +57,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
         text = new JPanel(); //inner JPanel to hold text
         text.setLayout(new GridLayout (3,2));
         initializeText();
-
         currentSelected = new int[2][2];
         boardGUI = new JPanel();
         boardGUI.setLayout(new GridLayout(8,8)); //tiles in a GridLayout of 8x8
@@ -115,13 +114,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             currentSelected = new int[2][2];
                             selected=0;
                         }
-                        if (ai!=null) //make AI move if AI is active
-                        {
-                            while(!board.isWhiteTurn() && board.gameIsWon()==null){
-                                ai.makeMove();
-                                renderBoard();
-                            }
-                        }
+                        makeAllAIMoves();
                     }
 
                 }
@@ -187,9 +180,18 @@ public class CheckersGUI extends javax.swing.JFrame  {
         this.setContentPane(entireGUI);
         setVisible(true);
     }
+    
+    private void makeAllAIMoves(){
+    	if(ai!=null)
+    	while(!board.isWhiteTurn() && board.gameIsWon()==null){
+            ai.makeMove();
+            renderBoard();
+        }
+    }
 
     private void initializeText()
     {
+    	
         final JLabel VICTORY = new JLabel ("VICTORY");  //Indicators to show vistory, Turn status and AI
         victoryStatus = new JLabel();
 
@@ -198,6 +200,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         final JLabel AI = new JLabel ("AI STATUS");
         aiToggle = new JButton("AI INACTIVE");
+        
         aiToggle.addActionListener(new ActionListener() { //button for toggling AI activation status
 
                 public void actionPerformed(ActionEvent e)
@@ -206,8 +209,8 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     if (aiActive)
                     {
                         ai = new AI(board);
-                        aiToggle.setText("AI ACTIVE");
-
+                        aiToggle.setText("AI ACTIVE  ");
+                        makeAllAIMoves();
                     }
                     else
                     {

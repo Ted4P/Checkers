@@ -8,7 +8,7 @@ public class AI{
     private Board board;
     private boolean isWhite, madeCapture;
     private ArrayList<Move> posMoves;
-    private final int BASE_RECUR = 7;
+    private final int BASE_RECUR = 20;
     public AI(Board board, boolean isWhite){     //Store a board to make moves on
         this.board = board;
         this.isWhite = isWhite;
@@ -57,16 +57,18 @@ public class AI{
         
         for(int i = 0; i < posMoves.size(); i++){
             Board test = new Board(board);
-            test.makeMove(posMoves.get(i).getX(), posMoves.get(i).getY(), posMoves.get(i).getNewX(), posMoves.get(i).getNewY());
+            test.makeMove(posMoves.get(i));
             AI tester = new AI(test, !isWhite);
             tester.makeMove(recurLeft-1);
+            
             if(!tester.captureMade()){
-                board.makeMove(posMoves.get(i).getX(), posMoves.get(i).getY(), posMoves.get(i).getNewX(), posMoves.get(i).getNewY());
+                board.makeMove(posMoves.get(i));
                 return true;
             }
         }
-        board.makeMove(posMoves.get(0).getX(), posMoves.get(0).getY(), posMoves.get(0).getNewX(), posMoves.get(0).getNewY());
-       return true;
+        int rand = (int)(Math.random()*posMoves.size());
+        board.makeMove(posMoves.get(rand));
+        return true;
     }
 
     public boolean makeMove(){

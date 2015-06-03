@@ -65,6 +65,10 @@ public class Board
     /**
      * makeMove does NOT perform array bounds checking; all input params are assumed to be 0<=i<=7
      */
+    public boolean makeMove(Move move){
+    	return makeMove(move.getX(), move.getY(),move.getNewX(),move.getNewY());
+    }
+    
     public boolean makeMove(int xpos, int ypos, int newXPos, int newYPos){
         TurnProcessor turnProc = new TurnProcessor(xpos, ypos, newXPos, newYPos, this);             //Create new turnProcessor
         if(lastMoveDouble){                                     //If this move is the second phase of a double move
