@@ -3,15 +3,13 @@
  * @author Hyun Choi, Ted Pyne, Patrick Forelli
  */
 import java.util.ArrayList;
-public class AI{
+public class AI extends MoveAI{
 
-    private Board board;
-    private boolean isWhite, madeCapture;
+    private boolean madeCapture;
     private ArrayList<Move> posMoves;
     private final int BASE_RECUR = 20;
     public AI(Board board, boolean isWhite){     //Store a board to make moves on
-        this.board = board;
-        this.isWhite = isWhite;
+        super(board,isWhite);
     }
 
     public AI(Board board){

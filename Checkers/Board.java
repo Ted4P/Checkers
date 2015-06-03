@@ -47,7 +47,8 @@ public class Board
     }
 
     public boolean isValidSelection(int xpos, int ypos){                 //If the selected piece is owned by the current player's turn
-        if(board[xpos][ypos]==null) return false;
+        if(xpos > 7 || xpos < 0 || ypos > 7 || ypos < 0) return false;
+    	if(board[xpos][ypos]==null) return false;
         return board[xpos][ypos].getIsWhite()==whiteTurn;                  //Compare piece color to current turn
     }
 

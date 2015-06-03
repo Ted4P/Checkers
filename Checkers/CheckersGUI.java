@@ -26,7 +26,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private JButton aiToggle;
 
     //AI implementation
-    private AI ai; 
+    private MoveAI ai; 
     private boolean aiActive;
 
     private boolean selected = false; //if a piece is selected or not
@@ -208,7 +208,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     aiActive = !aiActive;
                     if (aiActive)
                     {
-                        ai = new AI(board);
+                        ai = new AI2(board,false);
                         aiToggle.setText("AI ACTIVE  ");
                         makeAllAIMoves();
                     }
