@@ -4,9 +4,11 @@ import java.util.ArrayList;
 public class AI2 extends MoveAI{
 
 	private static final int BASE_RECUR = 4;
-
+	private static double aggression;
+	
 	public AI2(Board board, boolean isWhite) {
 		super(board, isWhite);
+		aggression = 1.5;
 	}
 
 	public AI2(Board board){
@@ -52,8 +54,8 @@ public class AI2 extends MoveAI{
 				else if(piece!=null) blackScore++;
 
 			}
-		if(isWhite) return whiteScore*2  - blackScore;
-		else return blackScore*2 - whiteScore;
+		if(isWhite) return (int)(whiteScore * aggression) - blackScore;
+		else return (int)(blackScore * aggression) - whiteScore;
 	}
 
 	private ArrayList<Move> findPosMoves(){
