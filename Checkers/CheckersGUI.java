@@ -186,11 +186,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
     	while(!board.isWhiteTurn() && board.gameIsWon()==null){
             ai.makeMove();
             renderBoard();
-            try {
-				wait(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
         }
     }
 
