@@ -23,10 +23,12 @@ public class AI2 extends MoveAI{
         if(board.isWhiteTurn()!=isWhite) return false; //If it's not the AI's turn, return false
         ArrayList<Move> moves = findPosMoves();
         if(moves.size()==0) return false;
-        if(recurLeft==0)            //If the base level of recursion has been reached
+        if(recurLeft==0){            //If the base level of recursion has been reached
+            for(Move move:moves){
+                if(Math.abs(move.getX()-move.getNewX())==2) return board.makeMove(move);
+            }
             return board.makeMove(moves.get((int)Math.random()*moves.size()));
-
-
+        }
         double bestMoveScore =100;
         Move bestMove = moves.get(0);
         for(Move move: moves){
