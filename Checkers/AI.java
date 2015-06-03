@@ -19,7 +19,6 @@ public class AI{
     }
 
     public boolean makeMove(int recurLeft){
-        System.out.println("How many recusions " + recurLeft);
         madeCapture = false;
         if(board.isWhiteTurn()!=isWhite) return false;        
         //First attempt a capture move
@@ -32,13 +31,10 @@ public class AI{
                     int[] newY = {y+2, y-2};
                     for(int tryX: newX)
                         for(int tryY: newY)
-                            if(validTarget(tryX, tryY) && calcCapture(x,y,tryX,tryY)){System.out.println("VALID CAP"); return true; }     //Use submethod to check for valid capture
+                            if(validTarget(tryX, tryY) && calcCapture(x,y,tryX,tryY))
+                            	return true;      //Use submethod to check for valid capture
                 }
-            }
-        }   
-        for(int x = 0; x < 8; x++){                   //If no capture is found, look for normal moves
-            for(int y = 0; y < 8; y++){
-                if(board.isValidSelection(x,y)){
+            
                     int[] newX = {x+1, x-1};        //Generate possible moves
                     int[] newY = {y+1, y-1};
                     for(int tryX: newX)
@@ -46,13 +42,15 @@ public class AI{
                             if(validTarget(tryX, tryY)){
                                 Board newMove = new Board(board);
                                 if(newMove.makeMove(x,y,tryX,tryY)){ 
-                                    if(recurLeft==0) {System.out.println("TAIL REACHED"); board.makeMove(x,y,tryX,tryY); return true;}
+                                    if(recurLeft==0) {
+                                    	board.makeMove(x,y,tryX,tryY); 
+                                    	return true;}
                                     else posMoves.add(new Move(x,y,tryX,tryY));
                                 }
                             }
                 }
             }
-        }
+        
         if(posMoves.size()==0) return false;   //If no move can be found, return false
         
         for(int i = 0; i < posMoves.size(); i++){
