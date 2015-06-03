@@ -9,6 +9,10 @@ public class AI2 extends MoveAI{
 		super(board, isWhite);
 	}
 
+	public AI2(Board board){
+		this(board,false);
+	}
+	
 	public boolean makeMove() {
 		return makeMove(BASE_RECUR);
 	}
@@ -36,7 +40,6 @@ public class AI2 extends MoveAI{
 				bestMove = move;
 			}
 		}
-		System.out.println(bestMoveScore);
 		return board.makeMove(bestMove);
 	}
 
