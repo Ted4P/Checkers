@@ -8,7 +8,7 @@ public class AI2 extends MoveAI{
 
 	public AI2(Board board, boolean isWhite) {
 		super(board, isWhite);
-		aggression = 1.5;
+		aggression = 2;
 	}
 
 	public AI2(Board board){
@@ -24,17 +24,17 @@ public class AI2 extends MoveAI{
 		ArrayList<Move> moves = findPosMoves();
 		if(moves.size()==0) return false;
 		if(recurLeft==0)			//If the base level of recursion has been reached
-			return board.makeMove(findPosMoves().get(0));
+			return board.makeMove(moves.get((int)Math.random()*moves.size()));
 
 
-		int bestMoveScore =100;
+		double bestMoveScore =100;
 		Move bestMove = moves.get(0);
 		for(Move move: moves){
 			Board testBoard = new Board(board);
 			testBoard.makeMove(move);
 
 			AI2 ai = new AI2(testBoard, !isWhite);
-			int moveScore = 0;
+			double moveScore = 0;
 			while(ai.makeMove(recurLeft-1));		//Go though all AI moves (work with double moves)
 				moveScore += ai.getGameScore();
 			if(moveScore<bestMoveScore){ 
@@ -45,17 +45,23 @@ public class AI2 extends MoveAI{
 		return board.makeMove(bestMove);
 	}
 
-	public int getGameScore(){
+	public double getGameScore(){
 		int blackScore=0, whiteScore=0;
 		for(int x = 0; x < 8; x++)
 			for(int y = 0; y < 8; y++){
 				Piece piece = board.getPiece(x,y);
-				if(piece!=null && piece.getIsWhite()) whiteScore++;
-				else if(piece!=null) blackScore++;
+				if(piece!=null && piece.getIsWhite()){
+					if(piece.getIsKing()) whiteScore+=3;
+					else whiteScore+=2;
+				}
+				else if(piece!=null){
+					if(piece.getIsKing()) whiteScore+=3;
+					else blackScore+=2;
+				}
 
 			}
-		if(isWhite) return (int)(whiteScore * aggression) - blackScore;
-		else return (int)(blackScore * aggression) - whiteScore;
+		if(isWhite) return (whiteScore * aggression) - blackScore;
+		else return (blackScore * aggression) - whiteScore;
 	}
 
 	private ArrayList<Move> findPosMoves(){
