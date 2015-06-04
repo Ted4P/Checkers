@@ -38,6 +38,7 @@ public class AI2 extends MoveAI{
             AI2 ai = new AI2(testBoard, !isWhite);
             double moveScore = 0;
             while(ai.makeMove(recurLeft-1));        //Go though all AI moves (work with double moves)
+                moveScore += ai.getGameScore();
             if(moveScore<bestMoveScore){ 
                 bestMoveScore=moveScore;
                 bestMove = move;
