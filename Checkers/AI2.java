@@ -57,7 +57,7 @@ public class AI2 extends MoveAI{
                         whiteScore+=2;
                 }
                 else if(piece!=null){
-                    if(piece.getIsKing()) whiteScore++;
+                    if(piece.getIsKing()) blackScore++;
                         blackScore+=2;
                 }
 
