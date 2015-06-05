@@ -27,6 +27,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private JLabel turnStatus;
     private JButton aiToggle;
     private JLabel aiDifficulty;
+    private JButton newGame;
     
    
 
@@ -43,17 +44,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
      * Creates new form CheckersGUI
      */
     public CheckersGUI() {
-        board = new Board();
-        GUIboard = new JLabel[8][8];
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                //if(board.getPiece(i,j) != null)
-                GUIboard[i][j] = new JLabel();
-
-            }
-        }
+        
 
         entireGUI = new JPanel(); //outer JPanel to store the boardGUI and the textual information
         entireGUI.setLayout(new BoxLayout(entireGUI, BoxLayout.X_AXIS));
@@ -68,6 +59,91 @@ public class CheckersGUI extends javax.swing.JFrame  {
         
         initializeText();
         currentSelected = new int[2][2];
+        
+        initializeBoard();
+        
+        panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
+        panel.add(boardGUI);
+        renderBoard(); //render board on the GUI
+
+    }
+
+    
+    
+    
+    
+    private void renderBoard() //method to arrange images to form the board
+    {
+
+        boolean previousColorIsWhite = false; //for arrangement
+
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                if (board.getPiece(i,j) != null)    //Get the piece at that space in the board
+                {
+                    if (board.getPiece(i,j).getIsWhite())//if the piece is white
+                    {
+                        if (board.getPiece(i,j).getIsKing())
+                            GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteking.png")));
+                        else 
+                            GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhite.png")));
+
+                    }
+                    else //so that means it's a red
+                    {
+                        if (board.getPiece(i,j).getIsKing())
+                            GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredking.png")));
+                        else 
+                            GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithred.png")));
+                    }
+
+                    previousColorIsWhite=true;
+                }
+                else //if no piece, then blank tile (white or green)
+                {
+                    if (previousColorIsWhite)
+                        GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/greentile.png")));
+                    else
+                        GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitetile.png")));
+
+                    previousColorIsWhite = !previousColorIsWhite;
+                }
+                boardGUI.add(GUIboard[i][j]);
+            }
+            previousColorIsWhite=!previousColorIsWhite;
+        }
+
+        refreshText(); //update the text fields
+        //combine the two components of the GUI
+        entireGUI.add(panel);
+        entireGUI.add(text);
+
+        setResizable(false); //window cannot be resized
+
+        //make it visible
+        pack();
+        this.setContentPane(entireGUI);
+        setVisible(true);
+    }
+    
+    
+    private void initializeBoard()
+    {
+        board = new Board();
+        GUIboard = new JLabel[8][8];
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                //if(board.getPiece(i,j) != null)
+                GUIboard[i][j] = new JLabel();
+
+            }
+        }
+        
+        
         boardGUI = new JPanel();
         boardGUI.setLayout(new GridLayout(8,8)); //tiles in a GridLayout of 8x8
         boardGUI.addMouseListener(new MouseAdapter() { //essence of the GUI's click detection
@@ -129,66 +205,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
                 }
             });
-        panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
-        panel.add(boardGUI);
-        renderBoard(); //render board on the GUI
-
-    }
-
-    public void renderBoard() //method to arrange images to form the board
-    {
-
-        boolean previousColorIsWhite = false; //for arrangement
-
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                if (board.getPiece(i,j) != null)    //Get the piece at that space in the board
-                {
-                    if (board.getPiece(i,j).getIsWhite())//if the piece is white
-                    {
-                        if (board.getPiece(i,j).getIsKing())
-                            GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteking.png")));
-                        else 
-                            GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhite.png")));
-
-                    }
-                    else //so that means it's a red
-                    {
-                        if (board.getPiece(i,j).getIsKing())
-                            GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredking.png")));
-                        else 
-                            GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithred.png")));
-                    }
-
-                    previousColorIsWhite=true;
-                }
-                else //if no piece, then blank tile (white or green)
-                {
-                    if (previousColorIsWhite)
-                        GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/greentile.png")));
-                    else
-                        GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitetile.png")));
-
-                    previousColorIsWhite = !previousColorIsWhite;
-                }
-                boardGUI.add(GUIboard[i][j]);
-            }
-            previousColorIsWhite=!previousColorIsWhite;
-        }
-
-        refreshText(); //update the text fields
-        //combine the two components of the GUI
-        entireGUI.add(panel);
-        entireGUI.add(text);
-
-        setResizable(false); //window cannot be resized
-
-        //make it visible
-        pack();
-        this.setContentPane(entireGUI);
-        setVisible(true);
     }
     
     private void makeAllAIMoves(){
@@ -270,16 +286,27 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         
         
+            
+        newGame = new JButton ("PLAY NEW GAME");
+        c.gridx=0;
+        c.gridy=4;
+        c.gridwidth=2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        newGame.addActionListener(new ActionListener() { //button to reset game
+            public void actionPerformed(ActionEvent e)
+            {
+                initializeBoard();
+            }
+        });
         
-            
-            
-            
+        text.add(newGame,c);
+        
             
             
         final JLabel name = new JLabel ("PCCheckers");
         name.setFont(new Font("Courier New", Font.ITALIC, 16));
         c.gridx=0;
-        c.gridy=4;
+        c.gridy=5;
         c.gridwidth=2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
@@ -289,11 +316,16 @@ public class CheckersGUI extends javax.swing.JFrame  {
         final JLabel copyright = new JLabel ("\u00a9" + "PC Software Solutions");
         copyright.setFont(new Font("Courier New", Font.ITALIC, 16));
         c.gridx=0;
-        c.gridy=5;
+        c.gridy=6;
         c.gridwidth=2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
         text.add(copyright,c);
+        
+        
+        
+        
+        
         
 
     }
