@@ -26,7 +26,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private JLabel victoryStatus;
     private JLabel turnStatus;
     private JButton aiToggle;
-    
+    private JLabel aiDifficulty;
     
    
 
@@ -255,12 +255,14 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     {
                         ai = new AI2(board);
                         aiToggle.setText("AI ACTIVE  ");
+                        difficultyToggle();
                         makeAllAIMoves();
                     }
                     else
                     {
                         aiToggle.setText("AI INACTIVE");
                         ai = null;
+                        difficultyToggle();
                     }
                 }
 
@@ -268,28 +270,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         
         
-        final JLabel aiDifficulty = new JLabel ("AI DIFFICULTY");
-        c.gridx=0;
-        c.gridy=3;
-        text.add(aiDifficulty, c); 
         
-        difficulty = new JSlider(JSlider.HORIZONTAL, 25, 200, 150); //slider for AI aggression level
-        difficulty.setMajorTickSpacing(25);
-        difficulty.setPaintTicks(true);//ticks
-        difficulty.setPaintLabels(true);//numbers at ticks
-        
-        difficulty.addChangeListener(new ChangeListener(){
-            public void stateChanged(ChangeEvent e){
-                JSlider source = (JSlider) e.getSource();
-                if (!source.getValueIsAdjusting()) {
-                    System.out.println((int) source.getValue());
-                    //add difficulty code here
-                }
-            }
-        });
-        c.gridx=1;
-        c.gridy=3;
-        text.add(difficulty, c);
             
             
             
@@ -317,7 +298,47 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     }
 
-    public void refreshText()
+    private void difficultyToggle()
+    {
+        if (aiActive)
+        {
+            aiDifficulty = new JLabel ("AI DIFFICULTY");
+            c.gridx=0;
+            c.gridy=3;
+            text.add(aiDifficulty, c); 
+            
+            difficulty = new JSlider(JSlider.HORIZONTAL, 25, 200, 150); //slider for AI aggression level
+            difficulty.setMajorTickSpacing(25);
+            difficulty.setPaintTicks(true);//ticks
+            difficulty.setPaintLabels(true);//numbers at ticks
+            
+            difficulty.addChangeListener(new ChangeListener(){
+                public void stateChanged(ChangeEvent e){
+                    JSlider source = (JSlider) e.getSource();
+                    if (!source.getValueIsAdjusting()) {
+                        double newValue = (double)source.getValue()/100;
+                        AI2.setAggression(newValue);
+                        System.out.println(newValue);
+                    }
+                }
+            });
+            c.gridx=1;
+            c.gridy=3;
+            text.add(difficulty, c);
+        }
+        else
+        {
+            text.remove(aiDifficulty);
+            text.remove(difficulty);
+        }
+        
+        
+        
+        
+    }
+    
+    
+    private void refreshText()
     {
         if (board.gameIsWon()!=null) //set victor if there is one
         {

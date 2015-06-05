@@ -15,6 +15,11 @@ public class AI2 extends MoveAI{
         this(board,false);
     }
 
+    public static void setAggression (double newVal){
+        aggression = newVal;
+    }
+    
+    
     public boolean makeMove() {
         return makeMove(BASE_RECUR);
     }
