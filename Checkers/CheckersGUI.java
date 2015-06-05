@@ -21,6 +21,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     //JPanel for textual info; JLabels/JButton for information and toggling
     private JPanel text;
+    GridBagConstraints c;
     private JLabel victoryStatus;
     private JLabel turnStatus;
     private JButton aiToggle;
@@ -55,7 +56,11 @@ public class CheckersGUI extends javax.swing.JFrame  {
         aiActive = false; //by default, AI is inactive
 
         text = new JPanel(); //inner JPanel to hold text
-        text.setLayout(new GridLayout (3,2));
+                                //text.setLayout(new GridLayout (3,2));
+        text.setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
+        
+        
         initializeText();
         currentSelected = new int[2][2];
         boardGUI = new JPanel();
@@ -182,8 +187,8 @@ public class CheckersGUI extends javax.swing.JFrame  {
     }
     
     private void makeAllAIMoves(){
-    	if(ai!=null)
-    	while(!board.isWhiteTurn() && board.gameIsWon()==null){
+        if(ai!=null)
+        while(!board.isWhiteTurn() && board.gameIsWon()==null){
             ai.makeMove();
             renderBoard();
         }
@@ -191,15 +196,72 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     private void initializeText()
     {
-    	
-        final JLabel VICTORY = new JLabel ("VICTORY");  //Indicators to show vistory, Turn status and AI
-        victoryStatus = new JLabel();
+        c.ipady=80;
+        
+        
+        final JLabel VICTORY = new JLabel ("VICTORY");  //victory text
+        c.gridx=0;
+        c.gridy=0;
+        text.add(VICTORY, c);
+        
+        victoryStatus = new JLabel();  //victory status
+        c.gridx=1;
+        c.gridy=0;
+        text.add(victoryStatus, c);
+        
+        
 
         final JLabel TURN = new JLabel ("TURN");
+        c.gridx=0;
+        c.gridy=1;
+        text.add(TURN, c);
+        
         turnStatus = new JLabel();
+        c.gridx=1;
+        c.gridy=1;
+        text.add(turnStatus, c);
+        
+        
 
         final JLabel AI = new JLabel ("AI STATUS");
+        c.gridx=0;
+        c.gridy=2;
+        text.add(AI, c);
+        
         aiToggle = new JButton("AI INACTIVE");
+        FontMetrics fm = aiToggle.getFontMetrics(aiToggle.getFont());
+        int w = fm.stringWidth("AI INACTIVE    ");
+        int h = fm.getHeight();
+        Dimension size = new Dimension (w,h);
+        aiToggle.setMinimumSize(size);
+        aiToggle.setPreferredSize(size);
+        c.gridx=1;
+        c.gridy=2;
+        c.ipady=40;
+        c.ipadx=0;
+        text.add(aiToggle, c);
+        
+        
+        final JLabel name = new JLabel ("PCCheckers");
+        name.setFont(new Font("Courier New", Font.ITALIC, 16));
+        c.gridx=0;
+        c.gridy=3;
+        c.gridwidth=2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.CENTER;
+        c.ipady=0;
+        text.add(name,c);
+        
+        final JLabel copyright = new JLabel ("\u00a9" + "PC Software Solutions");
+        copyright.setFont(new Font("Courier New", Font.ITALIC, 16));
+        c.gridx=0;
+        c.gridy=4;
+        c.gridwidth=2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.CENTER;
+        text.add(copyright,c);
+        
+        
         
         aiToggle.addActionListener(new ActionListener() { //button for toggling AI activation status
 
@@ -221,12 +283,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
             });
 
-        text.add(VICTORY);
-        text.add(victoryStatus);
-        text.add(TURN);
-        text.add(turnStatus);
-        text.add(AI);
-        text.add(aiToggle);
+        
 
     }
 
