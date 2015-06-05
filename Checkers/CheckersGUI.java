@@ -28,6 +28,8 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private JButton aiToggle;
     private JLabel aiDifficulty;
     private JButton newGame;
+    private JLabel aiDepth;
+    
     
    
 
@@ -35,6 +37,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private MoveAI ai;
     private boolean aiActive;
     private JSlider difficulty;
+    private JSlider lookAhead;
 
     private boolean selected = false; //if a piece is selected or not
     private int[][] currentSelected; //coordinates of the selected piece and the target area
@@ -285,22 +288,31 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     {
                         ai = new AI2(board);
                         aiToggle.setText("AI ACTIVE  ");
-                        difficultyToggle();
+                        aiMenuToggle();
                         makeAllAIMoves();
                     }
                     else
                     {
                         aiToggle.setText("AI INACTIVE");
                         ai = null;
-                        difficultyToggle();
+                        aiMenuToggle();
                     }
                 }
 
             });
 
+            
+            
+            
+            
+            
+            
+            
+            
+            
         newGame = new JButton ("PLAY NEW GAME");
         c.gridx=0;
-        c.gridy=4;
+        c.gridy=5;
         c.gridwidth=2;
         c.fill = GridBagConstraints.HORIZONTAL;
         newGame.addActionListener(new ActionListener() { //button to reset game
@@ -313,15 +325,16 @@ public class CheckersGUI extends javax.swing.JFrame  {
         text.add(newGame,c);
         
         
-            
-            
-            
-            
+        
+        
+        
+        
+        
             
         final JLabel name = new JLabel ("PCCheckers");
         name.setFont(new Font("Courier New", Font.ITALIC, 16));
         c.gridx=0;
-        c.gridy=5;
+        c.gridy=6;
         c.gridwidth=2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
@@ -331,7 +344,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         final JLabel copyright = new JLabel ("\u00a9" + "PC Software Solutions");
         copyright.setFont(new Font("Courier New", Font.ITALIC, 16));
         c.gridx=0;
-        c.gridy=6;
+        c.gridy=7;
         c.gridwidth=2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
@@ -340,7 +353,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     }
 
-    private void difficultyToggle()
+    private void aiMenuToggle()
     {
         if (aiActive)
         {
@@ -367,11 +380,47 @@ public class CheckersGUI extends javax.swing.JFrame  {
             c.gridx=1;
             c.gridy=3;
             text.add(difficulty, c);
+            
+            
+            
+            
+            aiDepth = new JLabel ("AI DEPTH");
+            c.gridx=0;
+            c.gridy=4;
+            text.add(aiDepth, c); 
+            
+            lookAhead = new JSlider(JSlider.HORIZONTAL, 1, 5, 4); //slider for AI aggression level
+            lookAhead.setMajorTickSpacing(1);
+            lookAhead.setPaintTicks(true);//ticks
+            lookAhead.setPaintLabels(true);//numbers at ticks
+            lookAhead.setSnapToTicks(true);
+            
+            lookAhead.addChangeListener(new ChangeListener(){
+                public void stateChanged(ChangeEvent e){
+                    JSlider source = (JSlider) e.getSource();
+                    if (!source.getValueIsAdjusting()) {
+                        int newValue = source.getValue();
+                        AI2.setRecur(newValue);
+                        System.out.println(newValue);
+                    }
+                }
+            });
+            c.gridx=1;
+            c.gridy=4;
+            text.add(lookAhead, c);
+            
+            
+            
+            
+            
+            
         }
         else
         {
             text.remove(aiDifficulty);
             text.remove(difficulty);
+            text.remove(aiDepth);
+            text.remove(lookAhead);
         }
         
         

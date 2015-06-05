@@ -3,12 +3,13 @@ import java.util.ArrayList;
 
 public class AI2 extends MoveAI{
 
-    private static final int BASE_RECUR = 4;
+    private static int baseRecur;
     private static double aggression;       //Higher values result in a more defensive AI
 
     public AI2(Board board, boolean isWhite) {
         super(board, isWhite);
         aggression = 1.5;
+        baseRecur = 4;
     }
 
     public AI2(Board board){
@@ -19,9 +20,12 @@ public class AI2 extends MoveAI{
         aggression = newVal;
     }
     
+    public static void setRecur (int newVal){
+        baseRecur = newVal;
+    }
     
     public boolean makeMove() {
-        return makeMove(BASE_RECUR);
+        return makeMove(baseRecur);
     }
 
     public boolean makeMove(int recurLeft) {
