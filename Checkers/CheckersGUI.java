@@ -27,6 +27,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private JLabel turnStatus;
     private JButton aiToggle;
     private JLabel aiDifficulty;
+    private JButton newGame;
     
    
 
@@ -60,75 +61,15 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
         aiActive = false; //by default, AI is inactive
 
-        text = new JPanel(); //inner JPanel to hold text
-                                //text.setLayout(new GridLayout (3,2));
+        text = new JPanel(); //inner JPanel to hold textual information
         text.setLayout(new GridBagLayout());
         c = new GridBagConstraints();
         
+        initializeBoardGUI(); //initalizes board side of gui
         
-        initializeText();
+        initializeText(); //initializes text side of gui
         currentSelected = new int[2][2];
-        boardGUI = new JPanel();
-        boardGUI.setLayout(new GridLayout(8,8)); //tiles in a GridLayout of 8x8
-        boardGUI.addMouseListener(new MouseAdapter() { //essence of the GUI's click detection
-
-                int selected =0;
-
-                public void mouseClicked(MouseEvent e) {
-                    if (selected==0) //if nothing is selected
-                    {
-                        currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
-                        selected++;
-                        //if invalid selection, revert
-                        if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
-                            currentSelected = new int[2][2];
-                            selected=0;
-                        }
-                        else {
-                            //If a valid selection has been made, highlight the piece to the user
-                            int i = currentSelected[0][1]; 
-                            int j = currentSelected[0][0];
-                            if (board.getPiece(i,j).getIsWhite())//if the piece is white
-                            {
-                                if (board.getPiece(i,j).getIsKing())
-                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhitekingselected.png")));
-                                else 
-                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteselected.png")));
-
-                            }
-                            else //so that means it's a red
-                            {
-                                if (board.getPiece(i,j).getIsKing())
-                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredkingselected.png")));
-                                else 
-                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredselected.png")));
-                            }  
-                        }
-                    }
-                    else if (selected ==1) //Target tile
-                    {
-                        //using the coordinates, make a move and render the board on the GUI
-                        currentSelected[1]=arrayCoord(pressed(e));
-                        TurnProcessor turnProc = new TurnProcessor(currentSelected[0][1], currentSelected[0][0], currentSelected[1][1], currentSelected[1][0], board);
-                        if(currentSelected[1][1]==currentSelected[0][1] && currentSelected[0][0] == currentSelected[1][0]){ //If the player clicked on their first selection, deselect it
-                            currentSelected = new int[2][2];
-                            selected=0;
-                            renderBoard();
-                        }
-                        else if(!turnProc.isValidTurn()){   //If the selection is invalid, wait for a valid one
-                            selected = 1;
-                        } else{         //If a valid selection, do the move
-                            move(currentSelected);
-                            renderBoard();
-                            //revert to original state
-                            currentSelected = new int[2][2];
-                            selected=0;
-                        }
-                        makeAllAIMoves();
-                    }
-
-                }
-            });
+        
         panel = new JPanel(); //enclose GridLayout within JPanel on the JFrame
         panel.add(boardGUI);
         renderBoard(); //render board on the GUI
@@ -190,6 +131,95 @@ public class CheckersGUI extends javax.swing.JFrame  {
         this.setContentPane(entireGUI);
         setVisible(true);
     }
+    
+    public void initializeBoard()
+    {
+        board = new Board();
+        GUIboard = new JLabel[8][8];
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                //if(board.getPiece(i,j) != null)
+                GUIboard[i][j] = new JLabel();
+
+            }
+        }
+        initializeBoardGUI();
+        
+        entireGUI.remove(panel);
+        
+        panel = new JPanel();
+        panel.add(boardGUI);
+        renderBoard();
+    }
+    
+    
+    public void initializeBoardGUI()
+    {
+        boardGUI = new JPanel();
+        boardGUI.setLayout(new GridLayout(8,8)); //tiles in a GridLayout of 8x8
+        boardGUI.addMouseListener(new MouseAdapter() { //essence of the GUI's click detection
+
+                int selected =0;
+
+                public void mouseClicked(MouseEvent e) {
+                    if (selected==0) //if nothing is selected
+                    {
+                        currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
+                        selected++;
+                        //if invalid selection, revert
+                        if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
+                            currentSelected = new int[2][2];
+                            selected=0;
+                        }
+                        else {
+                            //If a valid selection has been made, highlight the piece to the user
+                            int i = currentSelected[0][1]; 
+                            int j = currentSelected[0][0];
+                            if (board.getPiece(i,j).getIsWhite())//if the piece is white
+                            {
+                                if (board.getPiece(i,j).getIsKing())
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhitekingselected.png")));
+                                else 
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithwhiteselected.png")));
+
+                            }
+                            else //so that means it's a red
+                            {
+                                if (board.getPiece(i,j).getIsKing())
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredkingselected.png")));
+                                else 
+                                    GUIboard[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/whitewithredselected.png")));
+                            }  
+                        }
+                    }
+                    else if (selected ==1) //Target tile
+                    {
+                        //using the coordinates, make a move and render the board on the GUI
+                        currentSelected[1]=arrayCoord(pressed(e));
+                        TurnProcessor turnProc = new TurnProcessor(currentSelected[0][1], currentSelected[0][0], currentSelected[1][1], currentSelected[1][0], board);
+                        if(currentSelected[1][1]==currentSelected[0][1] && currentSelected[0][0] == currentSelected[1][0]){ //If the player clicked on their first selection, deselect it
+                            currentSelected = new int[2][2];
+                            selected=0;
+                            renderBoard();
+                        }
+                        else if(!turnProc.isValidTurn()){   //If the selection is invalid, wait for a valid one
+                            selected = 1;
+                        } else{         //If a valid selection, do the move
+                            move(currentSelected);
+                            renderBoard();
+                            //revert to original state
+                            currentSelected = new int[2][2];
+                            selected=0;
+                        }
+                        makeAllAIMoves();
+                    }
+
+                }
+            });
+    }
+    
     
     private void makeAllAIMoves(){
         if(ai!=null)
@@ -268,7 +298,19 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
             });
 
+        newGame = new JButton ("PLAY NEW GAME");
+        c.gridx=0;
+        c.gridy=4;
+        c.gridwidth=2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        newGame.addActionListener(new ActionListener() { //button to reset game
+            public void actionPerformed(ActionEvent e)
+            {
+                initializeBoard();
+            }
+        });
         
+        text.add(newGame,c);
         
         
             
@@ -279,7 +321,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         final JLabel name = new JLabel ("PCCheckers");
         name.setFont(new Font("Courier New", Font.ITALIC, 16));
         c.gridx=0;
-        c.gridy=4;
+        c.gridy=5;
         c.gridwidth=2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
@@ -289,7 +331,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         final JLabel copyright = new JLabel ("\u00a9" + "PC Software Solutions");
         copyright.setFont(new Font("Courier New", Font.ITALIC, 16));
         c.gridx=0;
-        c.gridy=5;
+        c.gridy=6;
         c.gridwidth=2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
