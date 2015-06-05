@@ -1,5 +1,6 @@
 
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -25,10 +26,14 @@ public class CheckersGUI extends javax.swing.JFrame  {
     private JLabel victoryStatus;
     private JLabel turnStatus;
     private JButton aiToggle;
+    
+    
+   
 
     //AI implementation
-    private MoveAI ai; 
+    private MoveAI ai;
     private boolean aiActive;
+    private JSlider difficulty;
 
     private boolean selected = false; //if a piece is selected or not
     private int[][] currentSelected; //coordinates of the selected piece and the target area
@@ -238,30 +243,8 @@ public class CheckersGUI extends javax.swing.JFrame  {
         c.gridx=1;
         c.gridy=2;
         c.ipady=40;
-        c.ipadx=0;
+        c.ipadx=40;
         text.add(aiToggle, c);
-        
-        
-        final JLabel name = new JLabel ("PCCheckers");
-        name.setFont(new Font("Courier New", Font.ITALIC, 16));
-        c.gridx=0;
-        c.gridy=3;
-        c.gridwidth=2;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.anchor = GridBagConstraints.CENTER;
-        c.ipady=0;
-        text.add(name,c);
-        
-        final JLabel copyright = new JLabel ("\u00a9" + "PC Software Solutions");
-        copyright.setFont(new Font("Courier New", Font.ITALIC, 16));
-        c.gridx=0;
-        c.gridy=4;
-        c.gridwidth=2;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.anchor = GridBagConstraints.CENTER;
-        text.add(copyright,c);
-        
-        
         
         aiToggle.addActionListener(new ActionListener() { //button for toggling AI activation status
 
@@ -283,6 +266,53 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
             });
 
+        
+        
+        final JLabel aiDifficulty = new JLabel ("AI DIFFICULTY");
+        c.gridx=0;
+        c.gridy=3;
+        text.add(aiDifficulty, c); 
+        
+        difficulty = new JSlider(JSlider.HORIZONTAL, 25, 200, 150); //slider for AI aggression level
+        difficulty.setMajorTickSpacing(25);
+        difficulty.setPaintTicks(true);//ticks
+        difficulty.setPaintLabels(true);//numbers at ticks
+        
+        difficulty.addChangeListener(new ChangeListener(){
+            public void stateChanged(ChangeEvent e){
+                JSlider source = (JSlider) e.getSource();
+                if (!source.getValueIsAdjusting()) {
+                    System.out.println((int) source.getValue());
+                    //add difficulty code here
+                }
+            }
+        });
+        c.gridx=1;
+        c.gridy=3;
+        text.add(difficulty, c);
+            
+            
+            
+            
+            
+        final JLabel name = new JLabel ("PCCheckers");
+        name.setFont(new Font("Courier New", Font.ITALIC, 16));
+        c.gridx=0;
+        c.gridy=4;
+        c.gridwidth=2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.CENTER;
+        c.ipady=0;
+        text.add(name,c);
+        
+        final JLabel copyright = new JLabel ("\u00a9" + "PC Software Solutions");
+        copyright.setFont(new Font("Courier New", Font.ITALIC, 16));
+        c.gridx=0;
+        c.gridy=5;
+        c.gridwidth=2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.CENTER;
+        text.add(copyright,c);
         
 
     }
