@@ -95,6 +95,27 @@ public class Board
         }
         return false;
     }
+    
+    public double getBoardScore(boolean isWhite, double aggression){
+    	
+    	int blackScore=0, whiteScore=0;
+        for(int x = 0; x < 8; x++)
+            for(int y = 0; y < 8; y++){
+                Piece piece = board[x][y];
+                if(piece!=null && piece.getIsWhite()){
+                    if(piece.getIsKing()) whiteScore++;
+                        whiteScore+=2;
+                }
+                else if(piece!=null){
+                    if(piece.getIsKing()) blackScore++;
+                        blackScore+=2;
+                }
+
+            }
+        if(isWhite) return (whiteScore * aggression) - blackScore;
+        else return (blackScore * aggression) - whiteScore;
+    	
+    }
 
     private void doMove(int xpos, int ypos, int newXPos, int newYPos){          //No checks whatsoever, just move the piece
         board[newXPos][newYPos] = board[xpos][ypos];
