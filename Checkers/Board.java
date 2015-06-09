@@ -10,7 +10,8 @@ public class Board
     private boolean lastMoveDouble;                                     //If the last move allowed a double move, store persistently across turn
     private int lastX, lastY;                                           //During the second phase of a double move, the player must select the piece they moved in the first phase
     private int blackLeft, whiteLeft;                                   //Number of pieces remaining
-
+    private Move lastMove;
+    
     public Board(){
         board = new Piece[8][8];
         whiteTurn = true;   //Start with white
@@ -91,10 +92,13 @@ public class Board
                 lastY = newYPos;
             }
             else nextPlayer();      //Else change player turn
+            lastMove = new Move(xpos,ypos,newXPos,newYPos);
             return true;
         }
         return false;
     }
+    
+    public Move getLastMove(){ return lastMove;}
     
     public double getBoardScore(boolean isWhite, double aggression){
     	

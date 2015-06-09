@@ -286,7 +286,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     aiActive = !aiActive;
                     if (aiActive)
                     {
-                        ai = new AI2(board);
+                        ai = new AI3(board);
                         aiToggle.setText("AI ACTIVE  ");
                         aiMenuToggle();
                         makeAllAIMoves();
