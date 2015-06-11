@@ -4,13 +4,14 @@ import java.util.ArrayList;
 public class AI3 extends MoveAI{
 
 	private static final int BASE_RECUR = 3;
+	private static final int MAX_SIZE = 2000;
 	private static double aggression;       //Higher values result in a more defensive AI
 
 	private ArrayList<Move> moves = new ArrayList<Move>();
 
 	public AI3(Board board, boolean isWhite) {
 		super(board, isWhite);
-		aggression = 1.5;
+		aggression = 2;
 	}
 
 	public AI3(Board board){
@@ -20,36 +21,49 @@ public class AI3 extends MoveAI{
 	public boolean makeMove() {
 		Node<Board> moveTree = new Node<Board>(board);
 		makeTree(BASE_RECUR, moveTree);
-		return chooseMove(moveTree);
+		System.out.println("Done making tree!");
+		setTreeVal(moveTree);
+		return board.makeMove(chooseMove(moveTree).getBoard().getLastMove());
+		
+	}
+	
+	public void setTreeVal(Node<Board> moveTree){
+		int size = moveTree.getChildNum();
+		if(size==0){
+			double score = moveTree.getBoard().getBoardScore(isWhite,aggression);
+			moveTree.setScore(score);
+			System.out.println("SCORE IS: " + score);
+		}
+		else{
+			double scoreAvg=0;
+			for(int i = 0; i < size; i++){
+				Node<Board> child = moveTree.getChild(i);
+				setTreeVal(child);
+				scoreAvg+= child.getScore();
+				
+			}
+			
+			moveTree.setScore(scoreAvg/size);
+		}
 	}
 
-	private boolean chooseMove(Node<Board> moveTree) {
+	public Node<Board> chooseMove(Node<Board> moveTree) {
 		int size = moveTree.getChildNum();
+		if(size==0) return null;
+		
 		double highest = Integer.MIN_VALUE;
 		Node<Board> best = null;
 		
-		for(int i = 0; i < size; i++){
+		for(int i = 0; i< size; i++){
 			Node<Board> child = moveTree.getChild(i);
-			double score = findChildScore(child);
-			if(score >highest){
-				highest = score;
+			double score = child.getScore();
+			if(score > highest){
 				best = child;
+				highest = score;
 			}
+			System.out.println("Choice " + i + ":" + score);		
 		}
-		if(best==null) return false;
-		return board.makeMove(best.getBoard().getLastMove());
-	}
-	
-	private double findChildScore(Node<Board> node){
-		if(node.getChildNum()==0)
-			return node.getBoard().getBoardScore(isWhite, aggression);
-		double score = 0;
-		int size = node.getChildNum();
-		for(int i = 0; i < size; i++){
-			Node<Board> child = node.getChild(i);
-			score+= findChildScore(child) + child.getBoard().getBoardScore(isWhite,aggression);
-		}
-		return score;
+		return best;
 	}
 
 	public void makeTree(int recurLeft, Node<Board> node){
@@ -65,12 +79,13 @@ public class AI3 extends MoveAI{
 	}
 
 	public boolean addChildren(Node<Board> node) {
-		moves = findPosMoves(node.getBoard());
+		Board board = node.getBoard();
+		moves = findPosMoves(board);
 		if(moves.size()==0) return false;
 		for(Move move: moves){
 			Board testBoard = new Board(board);
 			testBoard.makeMove(move);
-			node.addChild(testBoard);
+			node.addChild(testBoard); 
 		}
 		return true;
 	}

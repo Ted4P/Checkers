@@ -4,6 +4,7 @@ import java.util.ArrayList;
         private Board data;
         private Node<Board> parent;
         private ArrayList<Node<Board>> children;
+        private double score;
         
         public Node(Board board){
         	this(board,null);
@@ -18,6 +19,9 @@ import java.util.ArrayList;
         public void addChild(Board board){
         	children.add(new Node<Board>(board, this));
         }
+        
+        public void setScore(double score){ this.score = score;}
+        public double getScore(){ return score;}
         
         public Node<Board> getParent(){ return parent;}
         public Board getBoard(){ return data;}
