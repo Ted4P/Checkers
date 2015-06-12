@@ -92,7 +92,6 @@ public class AI3 extends MoveAI{
 		return true;
 	}
 
-
 	private ArrayList<Move> findPosMoves(Board board){
 		ArrayList<Move> moves = new ArrayList<Move>();
 		for(int x = 0; x < 8; x++){                   //Find possible captures
@@ -124,7 +123,6 @@ public class AI3 extends MoveAI{
 		}
 		return moves;
 	}
-
 
 	private boolean validTarget(int x, int y){      //Bounds checking for move and capture targets
 		return x > -1 && x < 8 && y > -1 && y < 8;

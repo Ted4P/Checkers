@@ -15,22 +15,16 @@ public class TurnProcessor
     }
 
     public boolean isValidTurn(){
-
         moveIsCapture = false;
-        boolean valid = false;
         if(board.getPiece(x,y).getIsKing() && kingValidMove()){
-
             return true;
         }
         else if(board.getPiece(x,y).getIsWhite() && whiteValidMove()){
-
             return true;
         }
         else if (!board.getPiece(x,y).getIsWhite() && blackValidMove()){
-
             return true;
         }
-
         return false;
     }
 

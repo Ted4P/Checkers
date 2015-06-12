@@ -22,7 +22,6 @@ import java.util.ArrayList;
         
         public void setScore(double score){ this.score = score;}
         public double getScore(){ return score;}
-        
         public Node<Board> getParent(){ return parent;}
         public Board getBoard(){ return data;}
         public int getChildNum(){ return children.size();}

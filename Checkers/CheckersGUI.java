@@ -47,6 +47,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
      * Creates new form CheckersGUI
      */
     public CheckersGUI() {
+    	selected = false;
         board = new Board();
         GUIboard = new JLabel[8][8];
         for (int i = 0; i < 8; i++)
@@ -165,17 +166,15 @@ public class CheckersGUI extends javax.swing.JFrame  {
         boardGUI.setLayout(new GridLayout(8,8)); //tiles in a GridLayout of 8x8
         boardGUI.addMouseListener(new MouseAdapter() { //essence of the GUI's click detection
 
-                int selected =0;
-
                 public void mouseClicked(MouseEvent e) {
-                    if (selected==0) //if nothing is selected
+                	if (!selected) //if nothing is selected
                     {
                         currentSelected[0]=arrayCoord(pressed(e)); //store coordinates of the press in array
-                        selected++;
+                        selected = true;
                         //if invalid selection, revert
                         if(!board.isValidSelection(currentSelected[0][1], currentSelected[0][0])){
                             currentSelected = new int[2][2];
-                            selected=0;
+                            selected=false;
                         }
                         else {
                             //If a valid selection has been made, highlight the piece to the user
@@ -198,24 +197,24 @@ public class CheckersGUI extends javax.swing.JFrame  {
                             }  
                         }
                     }
-                    else if (selected ==1) //Target tile
+                    else if (selected) //Target tile
                     {
                         //using the coordinates, make a move and render the board on the GUI
                         currentSelected[1]=arrayCoord(pressed(e));
                         TurnProcessor turnProc = new TurnProcessor(currentSelected[0][1], currentSelected[0][0], currentSelected[1][1], currentSelected[1][0], board);
                         if(currentSelected[1][1]==currentSelected[0][1] && currentSelected[0][0] == currentSelected[1][0]){ //If the player clicked on their first selection, deselect it
                             currentSelected = new int[2][2];
-                            selected=0;
+                            selected=false;
                             renderBoard();
                         }
                         else if(!turnProc.isValidTurn()){   //If the selection is invalid, wait for a valid one
-                            selected = 1;
+                            selected = true;
                         } else{         //If a valid selection, do the move
                             move(currentSelected);
                             renderBoard();
                             //revert to original state
                             currentSelected = new int[2][2];
-                            selected=0;
+                            selected=false;
                         }
                         makeAllAIMoves();
                     }
@@ -235,8 +234,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     private void initializeText()
     {
-        c.ipady=80;
-        
+        c.ipady=80;  
         
         final JLabel VICTORY = new JLabel ("VICTORY");  //victory text
         c.gridx=0;
@@ -247,8 +245,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
         c.gridx=1;
         c.gridy=0;
         text.add(victoryStatus, c);
-        
-        
 
         final JLabel TURN = new JLabel ("TURN");
         c.gridx=0;
@@ -258,9 +254,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
         turnStatus = new JLabel();
         c.gridx=1;
         c.gridy=1;
-        text.add(turnStatus, c);
-        
-        
+        text.add(turnStatus, c);    
 
         final JLabel AI = new JLabel ("AI STATUS");
         c.gridx=0;
@@ -301,14 +295,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
                 }
 
             });
-
-            
-            
-            
-            
-            
-            
-            
             
             
         newGame = new JButton ("PLAY NEW GAME");
@@ -344,7 +330,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
         text.add(copyright,c);
-        
 
     }
 
@@ -376,9 +361,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
             c.gridy=3;
             text.add(difficulty, c);
             
-            
-            
-            
             aiDepth = new JLabel ("AI DEPTH");
             c.gridx=0;
             c.gridy=4;
@@ -402,12 +384,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
             });
             c.gridx=1;
             c.gridy=4;
-            text.add(lookAhead, c);
-            
-            
-            
-            
-            
+            text.add(lookAhead, c);           
             
         }
         else
@@ -416,11 +393,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
             text.remove(difficulty);
             text.remove(aiDepth);
             text.remove(lookAhead);
-        }
-        
-        
-        
-        
+        }   
     }
     
     
@@ -451,9 +424,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
 
     private int[] pressed(MouseEvent e) //returns pixel coordinates where clicked
     {
-
-        Component c = boardGUI.findComponentAt(e.getX(), e.getY());
-
         int[] coordinates = new int[2]; //[x,y]
         coordinates[0] = e.getX();
         coordinates[1] = e.getY();
