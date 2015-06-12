@@ -138,6 +138,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
     public void initializeBoard()
     {
         board = new Board();
+        if(ai!=null) ai = new AI(board);
         GUIboard = new JLabel[8][8];
         for (int i = 0; i < 8; i++)
         {
@@ -324,12 +325,6 @@ public class CheckersGUI extends javax.swing.JFrame  {
         
         text.add(newGame,c);
         
-        
-        
-        
-        
-        
-        
             
         final JLabel name = new JLabel ("PCCheckers");
         name.setFont(new Font("Courier New", Font.ITALIC, 16));
@@ -372,7 +367,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     JSlider source = (JSlider) e.getSource();
                     if (!source.getValueIsAdjusting()) {
                         double newValue = (double)source.getValue()/100;
-                        AI2.setAggression(newValue);
+                        AI3.setAggression(newValue);
                         System.out.println(newValue);
                     }
                 }
@@ -400,7 +395,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     JSlider source = (JSlider) e.getSource();
                     if (!source.getValueIsAdjusting()) {
                         int newValue = source.getValue();
-                        AI2.setRecur(newValue);
+                        AI3.setRecur(newValue);
                         System.out.println(newValue);
                     }
                 }

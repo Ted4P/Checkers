@@ -3,8 +3,7 @@ import java.util.ArrayList;
 
 public class AI3 extends MoveAI{
 
-	private static final int BASE_RECUR = 3;
-	private static final int MAX_SIZE = 2000;
+	private static int baseRecur = 4;
 	private static double aggression;       //Higher values result in a more defensive AI
 
 	private ArrayList<Move> moves = new ArrayList<Move>();
@@ -20,7 +19,7 @@ public class AI3 extends MoveAI{
 
 	public boolean makeMove() {
 		Node<Board> moveTree = new Node<Board>(board);
-		makeTree(BASE_RECUR, moveTree);
+		makeTree(baseRecur, moveTree);
 		System.out.println("Done making tree!");
 		setTreeVal(moveTree);
 		return board.makeMove(chooseMove(moveTree).getBoard().getLastMove());
@@ -36,14 +35,17 @@ public class AI3 extends MoveAI{
 		}
 		else{
 			double scoreAvg=0;
+			double worst = Integer.MAX_VALUE;
 			for(int i = 0; i < size; i++){
 				Node<Board> child = moveTree.getChild(i);
 				setTreeVal(child);
-				scoreAvg+= child.getScore();
 				
+				double score = child.getScore();
+				scoreAvg+= score;
+				if(score<worst) worst = score;
 			}
 			
-			moveTree.setScore(scoreAvg/size);
+			moveTree.setScore((scoreAvg+worst)/(size+1));
 		}
 	}
 
@@ -91,7 +93,6 @@ public class AI3 extends MoveAI{
 	}
 
 
-
 	private ArrayList<Move> findPosMoves(Board board){
 		ArrayList<Move> moves = new ArrayList<Move>();
 		for(int x = 0; x < 8; x++){                   //Find possible captures
@@ -127,6 +128,14 @@ public class AI3 extends MoveAI{
 
 	private boolean validTarget(int x, int y){      //Bounds checking for move and capture targets
 		return x > -1 && x < 8 && y > -1 && y < 8;
+	}
+
+	public static void setAggression(double newAgg) {
+		aggression = newAgg;
+	}
+
+	public static void setRecur(int newDepth) {
+		baseRecur = newDepth;
 	}
 
 }
