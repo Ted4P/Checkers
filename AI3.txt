@@ -1,0 +1,5 @@
+AI3 explanation and API
+By Ted Pyne
+
+AI3, not coincidentally the third AI this checkers program has made use of, is a simple tree based AI relying on averaging all possible subsequent moves. It builds a tree of maximum depth 5 (user editable for performance reasons), then recursively moves through the tree and "scores" each leaf. 
+For base leaves, the score is calculated by a Board() method coutning the number of black vs white pieces; for a leaf with at least one child, the score is the average of all the child scores.

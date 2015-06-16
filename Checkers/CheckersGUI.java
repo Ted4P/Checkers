@@ -352,7 +352,7 @@ public class CheckersGUI extends javax.swing.JFrame  {
                     JSlider source = (JSlider) e.getSource();
                     if (!source.getValueIsAdjusting()) {
                         double newValue = (double)source.getValue()/100;
-                        AI3.setAggression(newValue);
+                        ((AI3)ai).setAggression(newValue);
                         System.out.println(newValue);
                     }
                 }

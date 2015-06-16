@@ -179,4 +179,18 @@ public class Board
         }
         return false;
     }
+    
+    public String toString(){
+    	String str="";
+    	for(Piece[] row: board){
+    		for(Piece p: row){
+    			str+="|";
+    			if(p==null) str+=" ";
+    			else if(p.getIsWhite()) str += "W";
+    			else str += "B";
+    		}
+    	str+= "\n";
+    	}
+    	return str;
+    }
 }

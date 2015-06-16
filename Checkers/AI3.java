@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class AI3 extends MoveAI{
 
 	private static int baseRecur = 4;
-	private static double aggression;       //Higher values result in a more defensive AI
+	private double aggression;       //Higher values result in a more defensive AI
 
 	private ArrayList<Move> moves = new ArrayList<Move>();
 
@@ -18,6 +18,7 @@ public class AI3 extends MoveAI{
 	}
 
 	public boolean makeMove() {
+		if(board.isWhiteTurn()!=isWhite) return false;
 		Node<Board> moveTree = new Node<Board>(board);
 		makeTree(baseRecur, moveTree);
 		System.out.println("Done making tree!");
@@ -31,7 +32,6 @@ public class AI3 extends MoveAI{
 		if(size==0){
 			double score = moveTree.getBoard().getBoardScore(isWhite,aggression);
 			moveTree.setScore(score);
-			System.out.println("SCORE IS: " + score);
 		}
 		else{
 			double scoreAvg=0;
@@ -128,7 +128,7 @@ public class AI3 extends MoveAI{
 		return x > -1 && x < 8 && y > -1 && y < 8;
 	}
 
-	public static void setAggression(double newAgg) {
+	public void setAggression(double newAgg) {
 		aggression = newAgg;
 	}
 
