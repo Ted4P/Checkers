@@ -9,7 +9,7 @@ public class AITester {
 		int l = settings.length;
 		for(int i = 0 ; i < l; i ++){
 			for(int j = i + 1; j < l; j++){
-				double result[] = testAI(i,j,13);
+				double result[] = testAI(i,j,18);
 				if(result[0]> result[1]) wins[i]++;
 				else if(result[1]>result[0]) wins[j]++;
 			}
@@ -25,8 +25,7 @@ public class AITester {
 		ai1.setAggression(AI1);
 		AI3 ai2 = new AI3(board, false);
 		ai2.setAggression(AI2);
-		AI3.setRecur(5);
-		
+
 		AI3.setRecur(5);
 		while(moves>0){
 			while(ai1.makeMove());

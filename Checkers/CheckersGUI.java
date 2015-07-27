@@ -342,8 +342,8 @@ public class CheckersGUI extends javax.swing.JFrame  {
             c.gridy=3;
             text.add(aiDifficulty, c); 
             
-            difficulty = new JSlider(JSlider.HORIZONTAL, 25, 200, 150); //slider for AI aggression level
-            difficulty.setMajorTickSpacing(25);
+            difficulty = new JSlider(JSlider.HORIZONTAL, 1, 8, 4); //slider for AI aggression level
+            difficulty.setMajorTickSpacing(1);
             difficulty.setPaintTicks(true);//ticks
             difficulty.setPaintLabels(true);//numbers at ticks
             
@@ -351,8 +351,8 @@ public class CheckersGUI extends javax.swing.JFrame  {
                 public void stateChanged(ChangeEvent e){
                     JSlider source = (JSlider) e.getSource();
                     if (!source.getValueIsAdjusting()) {
-                        double newValue = (double)source.getValue()/100;
-                        ((AI3)ai).setAggression(newValue);
+                        int newValue = source.getValue()-1;
+                        ((AI3)ai).setDifficulty(newValue);
                         System.out.println(newValue);
                     }
                 }

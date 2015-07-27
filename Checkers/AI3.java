@@ -5,6 +5,7 @@ public class AI3 extends MoveAI{
 
 	private static int baseRecur = 4;
 	private double aggression;       //Higher values result in a more defensive AI
+	private static final double[] aggrList = {.25,1.25,1,1.5,1.75,2.0,.5,.75};
 
 	private ArrayList<Move> moves = new ArrayList<Move>();
 
@@ -128,10 +129,14 @@ public class AI3 extends MoveAI{
 		return x > -1 && x < 8 && y > -1 && y < 8;
 	}
 
-	public void setAggression(double newAgg) {
-		aggression = newAgg;
+	public void setDifficulty(int difficulty) {
+		aggression = aggrList[difficulty];
 	}
 
+	public void setAggression(double aggression){
+		this.aggression = aggression;
+	}
+	
 	public static void setRecur(int newDepth) {
 		baseRecur = newDepth;
 	}
